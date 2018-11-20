@@ -21,7 +21,7 @@
   - [명함변경내역](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/end)
   - [뉴스피드](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/end)
 * <b>결과/성과</b><br>
-  - 체계적인 개발/운영 프로세스 경험
+  - Spring MVC 흐름 
   - 서버 클라이언트간의 상호작용
   - JQuery 기술 활용 및 습득
   - SVN 활용을 통한 협업/버전관리 경험
