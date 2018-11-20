@@ -12,14 +12,13 @@
   - VCS : SVN
   - ETC : JSP, HTML, CSS, javascript 
 * <b>주요기능 WEB</b>
-  - [회원가입, 로그인](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/prodct)
-  - [그룹관리](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/market)
-  - [명함 등록/검색/수정/삭제](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/deal)
-  - [명함 보내기](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/custmr)
-  - [명함 공유](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/end)
-  - [커뮤니케이션](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/end)
-  - [명함변경내역](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/end)
-  - [뉴스피드](https://github.com/MMMMM70/debec-web-app/tree/master/debecWebFinal/debec/src/main/java/net/su/end)
+  - [회원가입, 로그인](https://github.com/MMMMM70/bcms-web/tree/master/bcms/src/main/java/net/su/login)
+  - [그룹관리](https://github.com/MMMMM70/bcms-web/tree/master/bcms/src/main/java/net/su/bcms)
+  - [명함 등록/검색/수정/삭제](https://github.com/MMMMM70/bcms-web/tree/master/bcms/src/main/java/net/su/bcms)
+  - [명함 보내기](https://github.com/MMMMM70/bcms-web/tree/master/bcms/src/main/java/net/su/shar)
+  - [명함 공유](https://github.com/MMMMM70/bcms-web/tree/master/bcms/src/main/java/net/su/shar)
+  - [커뮤니케이션/명함변경내역](https://github.com/MMMMM70/bcms-web/tree/master/bcms/src/main/java/net/su/bcms)
+  - [뉴스피드]()
 * <b>결과/성과</b><br>
   - Spring MVC 흐름 
   - 서버 클라이언트간의 상호작용
