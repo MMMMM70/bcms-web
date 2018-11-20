@@ -1,0 +1,62 @@
+package net.su.bcms.dataAccessObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class NmeCardDataAccessObject extends SqlSessionDaoSupport {
+	
+	public void insertNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 insertNmeCard()작동");
+		getSqlSession().insert("nmeCardMapper.insertNmeCard", nmeCardValueObject);
+	}
+
+	public List<NmeCardValueObject> selectNmeCardList(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 selectNmeCardList()작동");
+		System.out.println(searchAndPageValueObject.getSearchAry()+"@@@@@@@@@@@@@@@@");
+		List<NmeCardValueObject> selectNmeCardList = getSqlSession().selectList("nmeCardMapper.selectNmeCardList", searchAndPageValueObject);		
+		return selectNmeCardList;
+	}
+	
+	public int selectNmeCardCount(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 selectNmeCardCount()작동");
+		int selectNmeCardCount = getSqlSession().selectOne("nmeCardMapper.selectNmeCardCount", searchAndPageValueObject);
+		return selectNmeCardCount;
+	}
+	
+	public NmeCardValueObject selectNmeCardView(int nmeCardSeq) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 selectNmeCardView()작동");
+		NmeCardValueObject selectNmeCardView = getSqlSession().selectOne("nmeCardMapper.selectNmeCardView", nmeCardSeq);
+		return selectNmeCardView;
+	}
+	
+	public void updateNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 updateNmeCard()작동");
+		getSqlSession().update("nmeCardMapper.updateNmeCard", nmeCardValueObject);
+	}
+	
+	public void deleteNmeCard(ArrayList<Integer> deleteArray) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 deleteNmeCard()작동");
+		for(int i=0; i<deleteArray.size();i++){
+			int nmeCardSeq = deleteArray.get(i);
+			getSqlSession().update("nmeCardMapper.deleteNmeCard", nmeCardSeq);
+		}
+	}
+	
+	public void real_deleteNmeCard(int nmeCardSeq) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 real_deleteNmeCard()작동");
+		getSqlSession().delete("nmeCardMapper.realDeleteNmeCard", nmeCardSeq);
+	}
+	
+	public List<NmeCardValueObject> selectLicnsList() throws Exception {
+		List<NmeCardValueObject> selectLicnsList = getSqlSession().selectList("nmeCardMapper.selectLicnsList");
+		System.out.println();
+		return selectLicnsList;
+	}
+}

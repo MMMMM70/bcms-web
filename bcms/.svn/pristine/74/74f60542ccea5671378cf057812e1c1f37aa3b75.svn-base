@@ -1,0 +1,166 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		   	<link rel="stylesheet" href="/resources/dist/css/ui.css" type="text/css">
+ 			<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">			
+			<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+			<script src="/resources/dist/js/selectize/selectize.js"></script>
+			<link rel="stylesheet" href="/resources/dist/css/css/normalize.css">
+			<link rel="stylesheet" href="/resources/dist/css/css/default.css">
+		<script>
+			document.title = 'BCMS - ${selectNmeCardHistrView.nmeCardHistrLastNme}${selectNmeCardHistrView.nmeCardHistrFirstNme} 님의 명함 변경내역';
+		</script>
+		<script type="text/javascript">
+			function nmeCardHistrBack(page) { //명함 변경내역 리스트
+		    	document.getElementById("after").value = "";
+				document.getElementById("before").value = "";
+				document.nmeCardInfo.currentPageNo.value = page;		
+				document.nmeCardInfo.action = "/nmeCardHistrSelectForm.do";
+				document.nmeCardInfo.submit();
+			}
+		</script>
+	</head>
+	<body>
+		<div class="wrapper" style="width:600px;">
+			<form name="nmeCardInfo" method="post">		
+				<input type="hidden" name="nmeCardHistrSeq" value="${nmeCardHistrValueObject.nmeCardHistrSeq}">
+				<input type="hidden" name="nmeCardSeq" value="${nmeCardHistrValueObject.nmeCardSeq}">
+				<input type="hidden" id="pageNo" name="currentPageNo" value="1">			
+				<input type="hidden" id="after" name="searchAfter" value="">
+				<input type="hidden" id="before" name="searchBefore" value="">>
+			</form>
+			<div class="card" style="width:500px">
+				<div style="border:1px solid white">
+				<h3 class="page-header" style="border-bottom:0px">✴ 명함 변경내역	</h3>	
+				</div>
+				
+				<article>
+					<div class="col-lg-12">
+						<table class="table" style="width:100%;">
+							<colgroup>
+								<col width="10%">
+								<col width="90%">
+							</colgroup>	
+							<!-- 이름 입력란 -->
+							<tr>
+								<td class="text-left">
+									<p>
+										<img alt="이름" src="resources/img/name.png" width="20px" height="20px" style="vertical-align:top">
+										<strong><font size=4  style="vertical-align:middle"> 성명</font></strong>
+									</p>									
+									<p style="margin-left: 24px;"><strong>이름 </strong><font> ${selectNmeCardHistrView.nmeCardHistrLastNme}${selectNmeCardHistrView.nmeCardHistrFirstNme}</font></p>
+									<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+									▼
+									</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+										<strong style="margin-left: 24px;">성별 </strong><font> ${selectNmeCardHistrView.nmeCardHistrSex}</font>
+									</div>									
+								</td>
+							</tr>
+							<!-- 회사 입력란 -->
+							<tr>
+								<td class="text-left" style="width:100%">
+									<p>
+										<img alt="회사" src="resources/img/company.png" width="20px" height="20px" style="vertical-align:top">
+										<strong><font size=4  style="vertical-align:middle"> 회사</font></strong>
+									</p>
+									<p style="margin-left: 24px;">
+										<strong>회사명  </strong><font> ${selectNmeCardHistrView.nmeCardHistrCompnNme}</font>
+										<strong>부서 </strong><font> ${selectNmeCardHistrView.nmeCardHistrDepmtNme}</font>
+									</p>
+									<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+									▼
+									</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+										<strong style="margin-left: 24px;">직급 </strong><font> ${selectNmeCardHistrView.nmeCardHistrPostnNme}</font>
+										<strong>직무 </strong><font> ${selectNmeCardHistrView.nmeCardHistrJobNme}</font>
+									</div>	
+								</td>								
+							</tr>
+							<!-- 주소 입력란 -->
+							<tr>
+								<td class="text-left" style="width:100%">
+									<p>
+										<img alt="주소" src="resources/img/juso.png" width="20px" height="20px" style="vertical-align:top">
+										<strong><font size=4  style="vertical-align:middle"> 주소</font></strong>
+									</p>
+									<p style="margin-left: 24px;"><strong>우편번호 </strong><font> ${selectNmeCardHistrView.nmeCardHistrPostNum}</font></p>
+									<p style="margin-left: 24px;"><strong>기본주소 </strong><font> ${selectNmeCardHistrView.nmeCardHistrBascAdrs}</font></p>
+									<p style="margin-left: 24px;"><strong>상세주소</strong><font> ${selectNmeCardHistrView.nmeCardHistrDetlAdrs}</font></p>
+								</td>
+							</tr>
+							<!-- 연락처 입력란 -->
+							<tr>
+								<td class="text-left" style="width:100%">
+									<p>
+										<img alt="연락처" src="resources/img/tel.png" width="20px" height="20px">
+										<strong><font size=4  style="vertical-align:middle"> 연락처 </font></strong>
+									</p>
+									<p style="margin-left: 24px;"><strong>휴대폰 </strong><font> ${selectNmeCardHistrView.nmeCardHistrMobil}</font></p>
+									<p style="margin-left: 24px;"><strong>전화 </strong><font> ${selectNmeCardHistrView.nmeCardHistrTel}</font></p>	
+									<p style="margin-left: 24px;"><strong>팩스 </strong><font> ${selectNmeCardHistrView.nmeCardHistrFax}</font></p>
+								</td>
+							</tr>
+							<!-- 네트워크 입력란 -->
+							<tr>
+								<td class="text-left" style="width:100%">
+									<p>
+										<img alt="네트워크" src="resources/img/network.png" width="20px" height="20px" style="vertical-align:top">
+										<strong><font size=4  style="vertical-align:middle"> 네트워크</font></strong>
+									</p>
+									<p style="margin-left: 24px;"><strong>이메일 </strong><font> ${selectNmeCardHistrView.nmeCardHistrEmail}</font></p>
+									<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+									▼
+									</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+										<p style="margin-left: 24px;"><strong>SNS </strong><font> ${selectNmeCardHistrView.nmeCardHistrSns}</font></p>
+										<p style="margin-left: 24px;"><strong>메신저 </strong><font> ${selectNmeCardHistrView.nmeCardHistrMesngr}</font></p>
+										<p style="margin-left: 24px;"><strong>홈페이지 </strong><font> ${selectNmeCardHistrView.nmeCardHistrHompg}</font></p>										
+									</div>												
+								</td>
+							</tr>
+							<!-- 기타 입력란 -->
+							<tr>
+								<td class="text-left" style="width:100%">
+									<p>
+										<img alt="기타" src="resources/img/etc.png" width="20px" height="20px" style="vertical-align:top">
+										<strong><font size=4  style="vertical-align:middle"> 기타</font></strong>
+									</p>											
+									<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+									▼
+									</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+									<p>												
+										<strong style="margin-left: 24px;">취미 </strong><font> ${selectNmeCardHistrView.nmeCardHistrHob}</font>
+									</p>
+									<p>
+										<strong style="margin-left: 24px;">관심사 </strong><font> ${selectNmeCardHistrView.nmeCardHistrInterst}</font>
+									</p>
+									<p style="float:left; margin-right:5px">
+										<strong style="margin-left: 24px;">자격증 </strong>			
+										<div style="float:left">
+											<select id="licnsSeq" name="licnsSeq" multiple class="demo-default" style="width:370px;" disabled>
+												<c:forEach items="${selectLicnsSeqHistr}" var="item">
+													<option value="${item.licnsSeq}" selected>${item.licnsNme}</option>
+												</c:forEach>
+											</select>
+											<script>
+												$('#licnsSeq').selectize({
+													maxItems: 10
+												});
+											</script>
+										</div>		
+									</p>
+									</div>	
+								</td>
+							</tr>
+						</table>
+						<button class="btn btn-default" style="margin-left:7px; float:right" onclick="javascript:nmeCardHistrBack(1)">돌아가기</button>
+					</div>
+				</article>
+			</div>
+		</div>
+	</body>
+</html>

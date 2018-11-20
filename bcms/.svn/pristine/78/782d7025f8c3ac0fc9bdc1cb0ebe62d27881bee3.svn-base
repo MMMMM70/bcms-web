@@ -1,0 +1,120 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<head>
+		<title>Insert title here</title>
+<script type="text/javascript">
+		$(document).ready(function newspeed() {
+			$.ajax({  
+			    type : "POST",  
+			    url : "/newSpeed2.do",  
+			    //data : "BaseValueObject",
+			    dataType : "JSON",
+			    success : function(data){  
+			    	var list = data["newList"];
+// 			    	alert("뜹니까?"+list);
+// 			    	alert("뭐가문제입니까");
+			    	//window.location.reload();
+			        //요청 작업을 성공적으로 수행 후 페이지에서 추가적으로 작업할 내용 입력     
+// 			        alert("아이쟉스맞죠??"+list.length);
+			        // json으로 넘어오므로 파싱이 필요없음 data=JSON.parse(data);
+	                var html = "<table class='table table-hover;' style='background: #EAEAEA;'>";
+	                for(var i=0; i<list.length; i++){
+// 	                $.each(data, function(newList) {
+// 	                	alert("ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ");
+	                    html += '<tr>';
+// 	                    html += '<td>' + list[i].newspeedSeq + '</td>';
+	                    html += '<td onclick="javascript:dddd()">'+ '<strong>' + list[i].sendNme + '</strong>' + '님이&nbsp;' + '<strong>'  + list[i].nmeCardLastNme + list[i].nmeCardFirstNme + '</strong>';
+// 	                    html += '<td>' + list[i].nmeCardFirstNme + list[i].nmeCardLastNme + '&nbsp;명함을'+'</td>';
+// 	                    html += '<td>' + list[i].nmeCardLastNme + '<br>' +'</td>';
+	                    if(list[i].newspeedType=='Y'){
+	                    	html+= '&nbsp;명함을' + '<br>'+ '공유했습니다.' + '<br>';
+	                    }
+	                    else if(list[i].newspeedType=='N'){
+	                    	html+= '&nbsp;명함을' + '<br>'+ '공유해제했습니다.' + '<br>';
+	                    }
+	                    else if(list[i].newspeedType=='C'){
+	                    	html+= '&nbsp;명함의' + '<br>'+ '커뮤니케이션을 보냈습니다.' + '<br>';
+	                    }
+	                    else if(list[i].newspeedType=='CC'){
+	                    	html+= '&nbsp;명함의' + '<br>'+ '커뮤니케이션을 등록했습니다.' + '<br>';
+	                    }
+	                    else if(list[i].newspeedType=='CU'){
+	                    	html+= '&nbsp;명함의' + '<br>'+ '커뮤니케이션을 수정했습니다.' + '<br>';
+	                    }
+	                    else if(list[i].newspeedType=='CD'){
+	                    	html+= '&nbsp;명함의' + '<br>'+ '커뮤니케이션을 삭제했습니다.' + '<br>';
+	                    }
+	                    html += '</td>';
+// 	                    html += '<td class="bgcolor2"><input type="button" onclick="rowDelete(this)" value='+ entry.comment_num+'></td>';
+	                    html += '</tr>';
+	                };
+	                html += '</table>';
+	                $("#newspeedSelect").html(html);
+// 	                window.location.reload(true);
+// 					location.reload();
+// 	                window.opener.location.reload();
+// 	                $("#newspeedSelect").attr("src",$("#newspeedSelect").attr("src"));
+	            },
+			    error:function(xhr,status,error){ //ajax 오류인경우  
+			    	alert("$");
+		            alert("error\nxhr : " + xhr + ", status : " + status + ", error : " + error);             
+		   		}
+			});
+		});		
+// 		function dddd(){
+// 			alert("떠라");
+// 		}
+</script>
+</head>
+<body>
+
+	<div style="width:300px;">
+		<div style="width:200px;">
+<!-- 			<pre class="pre-scrollable"> -->
+			<div style="width:100%;" align="center">
+				<div style="display:inline">
+					<h3>최신정보
+<!-- 					<button type="button" style="display:inline" class="btn btn-default-mina" aria-label="Left Align" onclick="javascript:newspeed()"> -->
+<!-- 						<span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> -->
+<!-- 					</button> -->
+					</h3>
+				</div>
+			</div>
+<!-- 			<div > -->
+<!-- 			</div> -->
+<!-- 			</pre> -->
+		</div>
+		<div style="width:200px; height:459px; overflow-y:auto;" id="newspeedSelect"  class="content; table-responsive" data-mcs-theme="dark">
+<!-- 			<div style="width:200px;"> -->
+<!-- 				<table class="table table-hover" style="background: #BDBDBD;"> -->
+<%-- 					<c:forEach var="newspeed" items="${newspeed}" varStatus="status"> --%>
+<!-- 						<tr class="active"> -->
+<!-- 							<td> -->
+<%-- 							<c:out value="${newspeed.sendNme}"/>님이&nbsp; --%>
+<%-- 							<c:out value="${newspeed.nmeCardFirstNme}"/><c:out value="${newspeed.nmeCardLastNme}"/>&nbsp;명함을 --%>
+<%-- 							<c:if test="${newspeed.newspeedType == 'y'}"> --%>
+<!-- 								<br>공유되었습니다.<br> -->
+<%-- 							</c:if> --%>
+<%-- 							<c:if test="${newspeed.newspeedType == 'n'}"> --%>
+<!-- 								<br>공유해제되었습니다.<br> -->
+<%-- 							</c:if> --%>
+<%-- 							<c:if test="${newspeed.newspeedType == 'c'}"> --%>
+<!-- 								<br>커뮤니케이션을 등록했습니다.<br> -->
+<%-- 							</c:if> --%>
+<!-- 							</td> -->
+<!-- 						</tr> -->
+<%-- 					</c:forEach> --%>
+<!-- 					<tr> -->
+<!-- 					</tr> -->
+<!-- 				</table> -->
+<!-- 			</div> -->
+   		</div>
+	</div>
+</body>
+</html>

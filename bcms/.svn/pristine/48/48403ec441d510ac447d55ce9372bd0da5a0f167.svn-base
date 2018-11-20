@@ -1,0 +1,114 @@
+package net.su.shar.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import net.su.bcms.service.NmeCardService;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+import net.su.bcms.valueObject.ComnctnNmeCardValueObject;
+import net.su.bcms.valueObject.ComnctnSearchAndPageValueObject;
+import net.su.shar.service.SharService;
+import net.su.shar.valueObject.SharValueObject;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+@Controller
+public class SharController {
+	
+	@Resource
+	private SharService sharService;
+
+	private static final Logger logger = LoggerFactory.getLogger(SharController.class);
+	//공유 화면 이동
+	@RequestMapping(value = "/sharForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharForm(Model model) throws Exception {
+
+		int nmeCardSeq =1;
+		System.out.println("sharController의 sharForm.do 작동");
+		List<SharValueObject> allMemList = sharService.selectMemList(nmeCardSeq); //전체 회원
+		model.addAttribute("allMemList", allMemList);
+		return "shar/sharForm"; 
+	}
+
+	@RequestMapping(value = "/sharTableForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharTableForm(Locale locale,Model model) throws Exception {
+		System.out.println("sharController의 sharTableForm.do 작동");
+		int nmeCardSeq =1;
+		logger.info("sharTableForm", locale);
+		List<SharValueObject> dumpMemList = sharService.selectDumpList(nmeCardSeq); // 임시 저장소
+		List<SharValueObject> nonSharMemList = sharService.selectNonsharList(nmeCardSeq); // 공유 안 하는 회원
+		model.addAttribute("nonSharMemList", nonSharMemList);
+		model.addAttribute("dumpMemList", dumpMemList);
+		return "shar/sharTableForm";
+	}
+	//
+	@RequestMapping(value = "/sharPlus.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String sharPlus(Locale locale,Model model, @RequestParam(value="plus[]") List<String> plusProcessing ) throws Exception {
+		System.out.println("sharController의 sharPlus.do 작동");
+
+		int nmeCardSeq =1;
+		
+		ArrayList<String> plusCarrier = new ArrayList<String>();
+		for(int i=0; i<plusProcessing.size(); i++){
+			plusCarrier.add(plusProcessing.get(i));
+		}
+		
+		sharService.plusingProcessor(plusCarrier, nmeCardSeq); // 더하기 처리 기능
+		List<SharValueObject> dumpMemList = sharService.selectDumpList(nmeCardSeq); // 공유 중인 회원
+		List<SharValueObject> nonSharMemList = sharService.selectNonsharList(nmeCardSeq); // 공유 안 하는 회원
+		model.addAttribute("nonSharMemList", nonSharMemList);
+		model.addAttribute("sharMemList", dumpMemList);
+		return "shar/sharForm";
+	}
+	@RequestMapping(value = "/sharMinus.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String sharMinus(Locale locale,Model model, @RequestParam(value="minus[]") List<String> minusProcessing ) throws Exception {
+		System.out.println("sharController의 sharMinus.do 작동");
+
+		int nmeCardSeq =1;
+		
+		ArrayList<String> minusCarrier = new ArrayList<String>();
+		for(int i=0; i<minusProcessing.size(); i++){
+			minusCarrier.add(minusProcessing.get(i));
+			System.out.println("##########"+minusCarrier);
+		}
+		
+		sharService.minusingProcessor(minusCarrier, nmeCardSeq); // 더하기 처리 기능
+		List<SharValueObject> dumpMemList = sharService.selectDumpList(nmeCardSeq); // 공유 중인 회원
+		List<SharValueObject> nonSharMemList = sharService.selectNonsharList(nmeCardSeq); // 공유 안 하는 회원
+		model.addAttribute("nonSharMemList", nonSharMemList);
+		model.addAttribute("dumpMemList", dumpMemList);
+		return "shar/sharForm";
+	}
+	@RequestMapping(value = "/sharInsert.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharInsert() throws Exception {
+		System.out.println("sharController의 sharInsert.do 작동");
+		int nmeCardSeq =1;
+		sharService.dumpToShar(nmeCardSeq);
+		return "redirect:/sharForm.do";
+	}
+	@RequestMapping(value = "/sharCancel.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharCancel() throws Exception {
+		System.out.println("sharController의 sharCancel.do 작동");
+		int nmeCardSeq =1;
+		sharService.dumpCancel(nmeCardSeq);
+		return "redirect:/sharForm.do";
+	}
+	
+}

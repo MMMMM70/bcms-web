@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >	<!-- 여기서 부터 끝까지 붙여 넣음 -->
+
+<mapper namespace="bbsMapper">
+	
+	<resultMap id="bbsValues" type="bbsVo">	<!-- ValueObject의 속성과 DataBase의 column을 연계 시켜준다. -->
+		<result property="bbsSeq" column="bbs_seq"/>
+		<result property="bbsTitle" column="bbs_title"/>
+		<result property="bbsWriter" column="bbs_writer"/>
+		<result property="bbsDate" column="bbs_date"/>
+		<result property="bbsContents" column="bbs_contents"/>
+		<result property="bbsUseAt" column="bbs_use_at"/>
+	</resultMap>
+	
+	<resultMap id="sapValues" type="sapVo">
+		<result property="searchBgnDe" column="searchBgnDe"/>
+		<result property="searchEndDe" column="searchEndDe"/>
+		<result property="searchCnd" column="searchCnd"/>
+		<result property="searchWrd" column="searchWrd"/>
+		<result property="currentPageNo" column="currentPageNo"/>
+		<result property="recordCountPerPage" column="recordCountPerPage"/>
+		<result property="pageSize" column="pageSize"/>
+		<result property="totalRecordCount" column="totalRecordCount"/>
+		<result property="totalPageCount" column="totalPageCount"/>
+		<result property="firstRecordIndex" column="firstRecordIndex"/>
+		<result property="lastRecordIndex" column="lastRecordIndex"/>
+		<result property="firstPageNoOnPageList" column="firstPageNoOnPageList"/>
+		<result property="lastPageNoOnPageList" column="lastPageNoOnPageList"/>
+	</resultMap>
+	
+	<insert id="insertBbs" parameterType="bbsVo">
+		<selectKey keyProperty="bbsSeq" resultType="int" order="BEFORE">
+			SELECT
+				IFNULL(MAX(bbs_seq),0) + 1 AS bbs_seq
+			FROM bbs_tb;
+		</selectKey>
+		INSERT
+		INTO
+		bbs_tb(
+			  bbs_seq
+			, bbs_title
+			, bbs_writer
+			, bbs_date
+			, bbs_contents
+			, bbs_use_at)
+		VALUES(
+			  #{bbsSeq}
+			, #{bbsTitle}
+			, #{bbsWriter}
+			, CURDATE()
+			, #{bbsContents}
+			, 'Y');
+	</insert>
+	
+	<select id="selectBbsList" parameterType="bbsVo" resultMap="bbsValues">
+		SELECT
+			  bbs_seq
+			, bbs_title
+			, bbs_writer
+			, bbs_date
+			, bbs_contents
+		FROM
+		bbs_tb
+		WHERE
+			bbs_use_at = 'Y'
+		<if test="searchCnd == 0">
+		   AND bbs_title LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		<if test="searchCnd == 1">
+		   AND bbs_contents LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>	
+		<if test="searchCnd == 2">
+		   AND bbs_writer LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		AND bbs_date > #{searchBgnDe}
+		<if test="searchEndDe != ''">
+			AND #{searchEndDe} > bbs_date
+		</if>
+		ORDER BY
+			bbs_seq DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstRecordIndex};
+	</select>
+	
+	<select id="selectBbsCount" parameterType="bbsVo" resultType="int">
+		SELECT
+			COUNT(bbs_seq) AS selectBbsCount
+		FROM
+		bbs_tb
+		WHERE
+			bbs_use_at = 'Y'
+		<if test="searchCnd == 0">
+		   AND bbs_title LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		<if test="searchCnd == 1">
+		   AND bbs_contents LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>	
+		<if test="searchCnd == 2">
+		   AND bbs_writer LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		AND bbs_date > #{searchBgnDe}
+		<if test="searchEndDe != ''">
+			AND #{searchEndDe} > bbs_date
+		</if>
+		;
+	</select>
+	
+	<select id="selectBbsView" parameterType="int" resultMap="bbsValues">
+		SELECT
+			  bbs_seq
+			, bbs_title
+			, bbs_writer
+			, bbs_date
+			, bbs_contents
+		FROM
+		bbs_tb
+		WHERE
+			bbs_seq = #{bbsSeq};
+	</select>
+	
+	<update id="updateBbs" parameterType="bbsVo">
+		UPDATE
+		bbs_tb
+		SET
+			  bbs_title = #{bbsTitle}
+			, bbs_contents = #{bbsContents}
+			, bbs_date = CURDATE()
+		WHERE
+			bbs_seq = #{bbsSeq};
+	</update>
+	
+	<update id="deleteBbs" parameterType="int">
+		UPDATE
+		bbs_tb
+		SET
+			  bbs_use_at = 'N'
+			, bbs_date = CURDATE()
+		WHERE
+			bbs_seq = #{bbsSeq};
+	</update>
+	
+	<delete id="realDeleteBbs" parameterType="int">
+		DELETE
+		FROM
+		bbs_tb
+		WHERE
+			bbs_seq = #{bbsSeq};
+	</delete>
+	
+</mapper>

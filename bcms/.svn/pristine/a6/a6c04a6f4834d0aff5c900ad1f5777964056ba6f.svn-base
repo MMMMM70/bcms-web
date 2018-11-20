@@ -1,0 +1,40 @@
+package net.su.shar.valueObject;
+
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.login.valueObject.MemValueObject;
+
+public class SharValueObject extends MemValueObject  {
+
+	private String sharUseAt="";
+	private String sharCretDate="";
+	private String dumpSeq="";
+	private int nmeCardSeq;//명함 고유값s
+	
+	public String getSharUseAt() {
+		return sharUseAt;
+	}
+	public void setSharUseAt(String sharUseAt) {
+		this.sharUseAt = sharUseAt;
+	}
+	
+	public String getSharCretDate() {
+		return sharCretDate;
+	}
+	public void setSharCretDate(String sharCretDate) {
+		this.sharCretDate = sharCretDate;
+	}
+	
+	public int getNmeCardSeq() {
+		return nmeCardSeq;
+	}
+	public void setNmeCardSeq(int nmeCardSeq) {
+		this.nmeCardSeq = nmeCardSeq;
+	}
+	
+	public String getDumpSeq() {
+		return dumpSeq;
+	}
+	public void setDumpSeq(String dumpSeq) {
+		this.dumpSeq = dumpSeq;
+	}
+}

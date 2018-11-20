@@ -1,0 +1,72 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<link rel="stylesheet" href="/resources/dist/css/ui.css" type="text/css">
+    	<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<script>
+		function nmeCardComnctnSelectForm() {
+			location.href="/nmeCardComnctnSelectForm.do"
+		}
+		function nmeCardComnctnUpdate() {
+			document.update.action = "/nmeCardComnctnUpdate.do";
+			document.update.submit();
+		}
+		function gogo() {
+		 if (update.t.value == "meeting") {
+			 update.comnctnAtnd.readOnly = false;
+			 update.comnctnNoAtnd.readOnly = false;
+	        }
+	        else {
+	        	update.comnctnAtnd.readOnly = true;
+	        	update.comnctnNoAtnd.readOnly = true;
+	        }
+		}
+	</script>
+	<body>
+		<form name="update" method="POST">
+		<div class="wrapper" style="width:610px;">
+			<table class="table table-bordered" border=1 style="width:500px">
+			<c:forEach var="selectNmeCardComnctnView" items="${selectNmeCardComnctnView}" varStatus="status">
+			<input type="text" name="comnctnSeq" value="${selectNmeCardComnctnView.comnctnSeq}">
+				<tr>
+						<th style="text-align:center">제목</th>
+						<td><input class="form-control" type="text" name="comnctnTitl" value="${selectNmeCardComnctnView.comnctnTitl}"></td>
+				</tr>
+				<tr>
+						<th style="text-align:center">구분</th>
+					<td>
+						<select class="form-control" name="comnctnType" id="t" value="${selectNmeCardComnctnView.comnctnType}" style="display:inline-block;" onchange="javascript:gogo()">
+				            <option value="meeting">meeting</option>
+				            <option value="memo">memo</option>
+		            	</select>
+		            </td>
+				</tr>
+				<tr>
+					<th rowspan=2 style="text-align:center">참석자</th>				
+					<td><input class="form-control" type="text" name="comnctnAtnd" value="${selectNmeCardComnctnView.comnctnAtnd}"></td>
+				</tr>
+				<tr>
+					<td><input class="form-control" type="text" name="comnctnNoAtnd" value="${selectNmeCardComnctnView.comnctnNoAtnd}"></td>
+				</tr>
+				<tr>
+					<th style="text-align:center">내용</th>
+				</tr>
+				<tr>
+					<td colspan=2><textarea rows="15" cols="80"name="comnctnContn" >${selectNmeCardComnctnView.comnctnContn}</textarea></td>
+				</tr>
+			</c:forEach>
+			</table>
+		</form>
+			<div style="text-align:right">
+				<input class="btn btn-default" type="button" value="수정완료" onclick="javascript:nmeCardComnctnUpdate()" target="iframe_a" ID="nmeCardComnctnViewForm">
+				<input class="btn btn-white" type="button" value="취소" onclick="javascript:nmeCardComnctnSelectForm()" target="iframe_a" ID="nmeCardComnctnViewForm">
+			</div>
+		</div>
+	</body>
+</html>

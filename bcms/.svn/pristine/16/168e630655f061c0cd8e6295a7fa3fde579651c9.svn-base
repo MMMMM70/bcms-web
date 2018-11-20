@@ -1,0 +1,33 @@
+package net.su.bcms.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.su.bcms.valueObject.ComnctnNmeCardValueObject;
+import net.su.bcms.valueObject.ComnctnSearchAndPageValueObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+
+public interface SharNmeCardService {
+	           
+	//공유명함 리스트 조회
+	public List<NmeCardValueObject> selectSharNmeCardList(NmeCardValueObject nmeCardValueObject) throws Exception;
+		
+	//공유 명함 상세보기
+	public NmeCardValueObject selectSharNmeCardView(NmeCardValueObject nmeCardValueObject) throws Exception;
+	
+	//공유명함 커뮤니케이션 리스트 조회
+	public List<ComnctnNmeCardValueObject> selectSharNmeCardComnctnList(ComnctnNmeCardValueObject comnctnNmeCardValueObject) throws Exception;
+		
+	//공유명함 커뮤니케이션 삭제
+	public void deleteSharNmeCardComnctn(ArrayList<Integer> deleteArray) throws Exception;
+	
+	//공유명함 커뮤니케이션 등록
+	public void insertSharNmeCardComnctn(ComnctnNmeCardValueObject comnctnNmeCardValueObject) throws Exception;
+	
+	//공유명함 커뮤니케이션 상세조회
+	public List<ComnctnNmeCardValueObject> selectSharNmeCardComnctnView(ComnctnNmeCardValueObject comnctnNmeCardValueObject) throws Exception;
+	
+	//공유명함 커뮤니케이션 수정
+	public void updateSharNmeCardComnctn(ComnctnNmeCardValueObject comnctnNmeCardValueObject) throws Exception;
+}

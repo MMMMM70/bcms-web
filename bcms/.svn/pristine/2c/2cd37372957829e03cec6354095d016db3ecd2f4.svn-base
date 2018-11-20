@@ -1,0 +1,74 @@
+package net.su.bcms.controller;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import net.su.bcms.service.GroupService;
+import net.su.bcms.valueObject.GroupValueObject;
+import net.su.login.valueObject.MemValueObject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class GroupController {
+	private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
+	
+	@Resource
+	private GroupService groupService;
+	
+	   @RequestMapping(value = "/groupListForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	   public String groupListForm(GroupValueObject groupValueObject, Model model, HttpSession session)throws Exception {
+		   
+		   session.getAttribute("userLoginInfo");
+			MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+			groupValueObject.setMemSeq(userLoginInfo.getMemSeq());
+		   
+		   
+		   List<GroupValueObject> groupList = groupService.gropSelect(groupValueObject);
+	    	model.addAttribute("groupList", groupList);
+	    	
+	       List<GroupValueObject> groupWholeList = groupService.groupWholeList(groupValueObject);   	
+	    	model.addAttribute("groupWholeList", groupWholeList);
+
+	      return "group/groupListForm";
+	   }
+	   @RequestMapping(value = "/groupAddition.do", method={RequestMethod.GET, RequestMethod.POST})
+	   public String groupAddition(Locale locale)throws Exception {
+		   logger.info("groupAddition", locale);
+		   
+	      return "group/groupAdditionForm";
+	   }
+	   
+	    @RequestMapping(value="/groupInsert.do", method = {RequestMethod.GET, RequestMethod.POST})
+		public String insert(GroupValueObject groupValueObject, Model model, HttpSession session, MemValueObject memValueObject)throws Exception{
+	    	
+	    	session.getAttribute("userLoginInfo");
+			MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+			groupValueObject.setMemSeq(userLoginInfo.getMemSeq());
+	    		
+	    	groupService.groupInsert(groupValueObject);
+	    	
+	    	
+	    	return "group/groupListForm";
+		}
+	    
+	    
+	    @RequestMapping(value="groupWholeList.do", method = {RequestMethod.GET, RequestMethod.POST})
+		public String groupWholeList(GroupValueObject groupValueObject, Model model, HttpSession session, MemValueObject memValueObject)throws Exception{
+	    	
+	    
+	    	   List<GroupValueObject> groupWholeList = groupService.groupWholeList(groupValueObject);   	
+	    	   model.addAttribute("groupWholeList", groupWholeList);
+	    	   
+	    	return "group/groupListForm";
+		}
+
+}

@@ -1,0 +1,74 @@
+package net.su.login.dataAccessObject;
+
+import java.util.List;
+
+import net.su.login.valueObject.MemValueObject;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class MemDataAccessObject extends SqlSessionDaoSupport {
+
+	
+	public int confirm(MemValueObject memValueObject) throws Exception {
+		System.out.println("MemDataAccessObject의 confirm() 작동");
+		int confirm = getSqlSession().selectOne("memMapper.confirm", memValueObject);
+		return confirm;
+	}
+	
+	public MemValueObject selectMemInfo(MemValueObject memValueObject) throws Exception {
+		System.out.println("MemDataAccessObject의 selectMemInfo() 작동");
+		memValueObject = getSqlSession().selectOne("memMapper.selectMemInfo", memValueObject);
+		return memValueObject;
+	}
+	
+	//회원 고유값 생성
+	public int selectMemSeq()throws Exception{
+		System.out.println("MemDataAccessObjewct의 selectMemSeq()작동");
+		int selectMemSeq = getSqlSession().selectOne("memMapper.selectMemSeq");
+		return selectMemSeq;
+	}
+	
+	//회원 등록
+	public void insertMembership (MemValueObject memValueObject) throws Exception{
+		System.out.println(memValueObject.getMemSeq()+"부서이름");
+		System.out.println(memValueObject.getMemPostnNme()+"부서이름");
+		
+		getSqlSession().insert("memMapper.insertMembership", memValueObject);
+	}
+	
+	//로그인 세션
+	public MemValueObject selectUserSession (MemValueObject memValueObject) throws Exception{
+		
+		MemValueObject selectUserSession=getSqlSession().selectOne("memMapper.selectUserSession", memValueObject);
+		
+		return selectUserSession;
+	}
+	
+	//아이디 중복 확인
+	public MemValueObject idCheck (MemValueObject memValueObject)throws Exception{
+		
+		MemValueObject idCheck = getSqlSession().selectOne("memMapper.idCheck", memValueObject);
+		
+		return idCheck;
+	}
+	
+	//회원정보 수정 화면
+	public MemValueObject memSelectViewForm (MemValueObject memValueObject)throws Exception{
+		
+		MemValueObject memSelectViewForm = getSqlSession().selectOne("memMapper.memSelectViewForm", memValueObject);
+		
+		return memSelectViewForm;
+	}
+	
+	//회원정보 수정
+	public void updateMembership (MemValueObject memValueObject)throws Exception{
+		
+		getSqlSession().update("memMapper.updateMembership", memValueObject);
+		
+	}
+	
+	
+}
+

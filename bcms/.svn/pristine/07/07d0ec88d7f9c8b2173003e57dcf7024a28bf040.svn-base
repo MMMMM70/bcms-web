@@ -1,0 +1,124 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html> <!-- -->
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
+<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- 	선있는 테이블 css -->
+
+</head>
+<body id = "sendTableForm">
+	<form id="sharing">
+		<div style="float:center;height: 750px;width:1000px;margin-left:8px;">
+			<div style="font-size:30px;padding:15px;">
+				보내기
+			</div>
+			<div style="float:left;width:440px;height:550px;border:1px solid;margin-left:20px;">
+				<div style="width:440px;height:550px;overflow:auto">
+					<table class="table table-bordered"  id="noneSendMemList" style="table-layout:fixed;word-break:break-all;">
+						<tbody>
+							<tr>
+								<th width="30"><input type="checkbox" id = "allACheck" onclick="allAChecking()"/></th>				
+								<th width="90">이름</th>
+								<th width="90">부서</th>
+								<th width="60">직급</th>
+								<th width="150">이메일</th>
+							</tr>
+							<c:forEach var="nonSend" items="${noneSendMemList}" varStatus="status">
+								<tr style="text-align:left">
+									<td width="30"><input type="checkbox" id="${nonSend.memSeq}" name="ACheck"  /></td>
+									<td width="90"><span style="color:gray;font-size:11pt;">${nonSend.memNme}</span></td>    
+									<td width="90"><span style="color:gray;font-size:11pt;">${nonSend.memDepmtNme}</span></td>
+									<td width="60"><span style="color:gray;font-size:11pt;">${nonSend.memPostnNme}</span></td>
+									<td width="150"><span style="color:gray;font-size:11pt;">${nonSend.memEmail}</span></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+				<c:if test="${sharVo.sharLastRecordIndex != 1}">
+					<div style="text-align:center">
+						<ul class="pagination">
+							<c:if test="${sharVo.sharTotalPageCount > 1 && sharVo.sharCurrentPageNo != 1}">
+								<li class="paginate_button previous"><a href="javascript:sharSelectForm(1)">&laquo;</a></li>
+								<li class="paginate_button previous"><a href="javascript:sharSelectForm(${sharVo.sharCurrentPageNo-1})">&lsaquo;</a></li>
+							</c:if>
+						
+							<c:forEach var="sharpage" begin="${sharVo.sharFirstPageNoOnPageList}" end="${sharVo.sharLastPageNoOnPageList}">
+								<c:if test="${sharpage == sharVo.sharCurrentPageNo}">
+									<li class="paginate_button active"><a href="javascript:sharSelectForm(${sharpage})">${sharpage}</a></li>
+								</c:if>
+								<c:if test="${sharpage != sharVo.sharCurrentPageNo}">
+									<li class="paginate_button"><a href="javascript:sharSelectForm(${sharpage})">${sharpage}</a></li>
+								</c:if>
+							</c:forEach>
+						
+							<c:if test="${sharVo.sharTotalPageCount > 1 && sharVo.sharTotalPageCount != sharVo.sharCurrentPageNo}">
+								<li class="paginate_button next"><a href="javascript:sharSelectForm(${sharVo.sharCurrentPageNo+1})">&rsaquo;</a></li>
+								<li class="paginate_button next"><a href="javascript:sharSelectForm(${sharVo.sharTotalPageCount})">&raquo;</a></li>
+							</c:if>
+						</ul>
+					</div>
+				</c:if>
+				<div style="text-align:center">
+					<select id="sharSearchCnd" class="form-control" style="width: 126px;">
+						<c:choose>
+							<c:when test="${sharVo.sharSearchCnd == 0}">
+								<option value="0" selected="selected">전체</option>
+								<option value="1">이름</option>
+								<option value="2">부서</option>
+							</c:when>
+							<c:when test="${sharVo.sharSearchCnd == 1}">
+								<option value="0">전체</option>
+								<option value="1" selected="selected">이름</option>
+								<option value="2">부서</option>
+							</c:when>
+							<c:when test="${sharVo.sharSearchCnd == 2}">
+								<option value="0">전체</option>
+								<option value="1" >이름</option>
+								<option value="2"selected="selected">부서</option>
+							</c:when>
+						</c:choose>
+					</select>
+					<input id="sharSearchWrd" class="form-control" type="text" name="search" style="width: 226px;">
+					<input class="btn btn-default"  type="button" value="검색" onclick="javascript:sharSearch(1)">
+				</div>
+			</div>
+			<div style="margin-top:250px;margin-left:15px;float:left;width:65px">
+				<div>
+					<a href="javascript:sendPlus()"><img src="resources/img/sharPlus.png"  style="width: auto;margin-left:-10px;"></a>
+					<a href="javascript:sendMinus()"><img src="resources/img/sharMinus.png"  style="width: auto;margin-left:-10px;"></a>		
+				</div>
+			</div>
+			<div style="float:right;margin-right:10px;;width:440px;height:550px;border:1px solid;overflow:auto;">
+				<table class="table table-bordered"  id="sendMemList" style="table-layout:fixed;word-break:break-all;">
+					<tbody>
+						<tr>
+							<th width="30"><input type="checkbox" id = "allBCheck" onclick="allBChecking()"/></th>				
+							<th width="90">이름</th>
+							<th width="90">부서</th>
+							<th width="60">직급</th>
+							<th width="150">이메일</th>
+						</tr>
+						<c:forEach var="send" items="${sendMemList}" varStatus="status">
+							<tr style="text-align:left">
+								<td width="30"><input type="checkbox" id="${send.memSeq}" name="BCheck" /></td>
+								<td width="90"><span style="color:gray;font-size:11pt;">${send.memNme}</span></td>    
+								<td width="90"><span style="color:gray;font-size:11pt;">${send.memDepmtNme}</span></td>
+								<td width="60"><span style="color:gray;font-size:11pt;">${send.memPostnNme}</span></td>
+								<td width="150"><span style="color:gray;font-size:11pt;">${send.memEmail}</span></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+		<div style="float:right;height:50px;margin-top:70px;margin-right:10px;">
+			<input type="button" Style="width:100px;height:40px" value="보내기"onclick="sendInsert()">
+			<input type="button" Style="width:100px;height:40px" value="닫기"onclick="sharCancel(2)">
+		</div>
+		</div>
+	</form>
+</body>
+</html>

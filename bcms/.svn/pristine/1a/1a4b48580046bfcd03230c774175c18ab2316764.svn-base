@@ -1,0 +1,45 @@
+package net.su.bcms.service;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.su.bcms.dataAccessObject.GroupDataAccessObject;
+import net.su.bcms.valueObject.GroupValueObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.logger.Logger;
+
+import org.springframework.stereotype.Service;
+
+
+
+@Service
+public class GroupServiceimpl implements GroupService{
+	
+	@Resource
+	private GroupDataAccessObject groupDataAccessObject;
+	
+
+	public void groupInsert(GroupValueObject groupValueObject) throws Exception {
+		
+		groupDataAccessObject.groupInsert(groupValueObject);
+	}
+	
+	public List<GroupValueObject> gropSelect(GroupValueObject groupValueObject) throws Exception{
+		
+		List<GroupValueObject> groupList = groupDataAccessObject.gropSelect(groupValueObject);
+		
+		return groupList;
+	}
+	
+	public List<GroupValueObject> groupWholeList(GroupValueObject groupValueObject) throws Exception{
+		
+		Logger.info(null);
+		int selectGroupCount = groupDataAccessObject.selectGroupCount(groupValueObject);
+		List<GroupValueObject> groupWholeList = groupDataAccessObject.groupWholeList(groupValueObject);
+		groupValueObject.setMemTotalRecordCount(selectGroupCount);
+		return groupWholeList;
+
+	}
+
+}

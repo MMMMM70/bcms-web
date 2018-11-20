@@ -1,0 +1,28 @@
+package net.su.bcms.dataAccessObject;
+
+import java.util.List;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+
+@Repository
+public class RecvNmeCardDataAccessObject extends SqlSessionDaoSupport {
+
+	//받은 명함 리스트
+	public List<NmeCardValueObject> selectRecvNmeCardList(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 selectRecvNmeCardList()작동");
+		List<NmeCardValueObject> selectRecvNmeCardList = getSqlSession().selectList("nmeCardMapper.selectRecvNmeCardList", searchAndPageValueObject);
+		System.out.println();
+		return selectRecvNmeCardList;
+	}
+	
+	//받은 명함 리스트 카운트
+	public int selectRecvNmeCardCount(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("NmeCardDataAccessObject의 selectRecvNmeCardCount()작동");
+		int selectRecvNmeCardCount = getSqlSession().selectOne("nmeCardMapper.selectRecvNmeCardCount", searchAndPageValueObject);
+		return selectRecvNmeCardCount;
+	}
+}

@@ -1,0 +1,293 @@
+package net.su.shar.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import net.su.bcms.service.NmeCardService;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.login.valueObject.MemValueObject;
+import net.su.shar.service.SharService;
+import net.su.shar.valueObject.SharSearchAndPageValueObject;
+import net.su.shar.valueObject.SharValueObject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class SharController {
+	
+	@Resource
+	private SharService sharService;
+
+
+	private static final Logger logger = LoggerFactory.getLogger(SharController.class);
+	//공유 화면 이동
+	@RequestMapping(value = "/sharForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharForm(Model model, HttpSession session) throws Exception {
+		System.out.println("sharController의 sharForm.do 작동");
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		SharValueObject SharVo = new SharValueObject();
+		SharVo.setMemSeq(userLoginInfo.getMemSeq());
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		List<SharValueObject> allMemList = sharService.selectMemList(SharVo); //전체 회원
+		int selector =1;
+		model.addAttribute("allMemList", allMemList);
+		model.addAttribute("selector", selector);
+		return "shar/sharForm"; 
+	}
+
+	@RequestMapping(value = "/sharRelsForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String shaRelsrForm(Model model, HttpSession session) throws Exception {
+		System.out.println("sharController의 shaRelsrForm.do 작동");
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		SharValueObject SharVo = new SharValueObject();
+		SharVo.setMemSeq(userLoginInfo.getMemSeq());
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		List<SharValueObject> selectSharList = sharService.selectSharList(SharVo); //전체 회원
+		int selector =2;
+		model.addAttribute("selectSharList", selectSharList);
+		model.addAttribute("selector", selector);
+		return "shar/sharForm"; 
+	}
+	
+	@RequestMapping(value = "/sendForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sendrForm(Model model, HttpSession session) throws Exception {
+		System.out.println("sharController의 sendForm.do 작동");
+		
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		int where = userLoginInfo.getMemSeq();
+		int selector =3;
+		List<SharValueObject> allSendMemList = sharService.allMemList(where); //전체 회원
+		model.addAttribute("selector", selector);
+		model.addAttribute("allSendMemList", allSendMemList);
+		return "shar/sharForm"; 
+	}
+
+	@RequestMapping(value = "/sharTableForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharTableForm(Locale locale,Model model, HttpSession session, SharSearchAndPageValueObject sharSapVo) throws Exception {
+		System.out.println("sharController의 sharTableForm.do 작동");
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		SharValueObject SharVo = new SharValueObject();
+		SharVo.setMemSeq(userLoginInfo.getMemSeq());
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		logger.info("sharTableForm", locale);
+		sharSapVo.setSharTotalRecordCount(sharService.noneSharMemCount(SharVo).getSharTotalRecordCount()); // 공유 안 하는 회원
+		List<SharValueObject> dumpMemList = sharService.selectDumpList(SharVo); // 임시 저장소
+		List<SharValueObject> nonSharMemList = sharService.selectNonSharList(SharVo, sharSapVo); // 공유 안 하는 회원
+		model.addAttribute("nonSharMemList", nonSharMemList);
+		model.addAttribute("dumpMemList", dumpMemList);
+		model.addAttribute("sharSapVo", sharSapVo);
+		return "shar/sharTableForm";
+	}
+	//
+	@RequestMapping(value = "/sharPlus.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String sharPlus(Locale locale,Model model, @RequestParam(value="plus[]") List<String> plusProcessing,HttpSession session, SharSearchAndPageValueObject sharSapVo ) throws Exception {
+		System.out.println("sharController의 sharPlus.do 작동");
+
+
+		SharValueObject SharVo = new SharValueObject();
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		
+		ArrayList<String> plusCarrier = new ArrayList<String>();
+		for(int i=0; i<plusProcessing.size(); i++){
+			plusCarrier.add(plusProcessing.get(i));
+		}
+
+		sharSapVo.setSharTotalRecordCount(sharService.noneSharMemCount(SharVo).getSharTotalRecordCount());
+		sharService.plusingProcessor(plusCarrier, SharVo); // 더하기 처리 기능
+		List<SharValueObject> dumpMemList = sharService.selectDumpList(SharVo); // 공유 중인 회원
+		List<SharValueObject> nonSharMemList = sharService.selectNonSharList(SharVo, sharSapVo); // 공유 안 하는 회원
+		model.addAttribute("nonSharMemList", nonSharMemList);
+		model.addAttribute("sharMemList", dumpMemList);
+		return "shar/sharForm";
+	}
+	@RequestMapping(value = "/sharMinus.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String sharMinus(Locale locale,Model model, @RequestParam(value="minus[]") List<String> minusProcessing, HttpSession session, SharSearchAndPageValueObject sharSapVo ) throws Exception {
+		System.out.println("sharController의 sharMinus.do 작동");
+
+		SharValueObject SharVo = new SharValueObject();
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		
+		ArrayList<String> minusCarrier = new ArrayList<String>();
+		for(int i=0; i<minusProcessing.size(); i++){
+			minusCarrier.add(minusProcessing.get(i));
+		}
+
+		sharSapVo.setSharTotalRecordCount(sharService.noneSharMemCount(SharVo).getSharTotalRecordCount());
+		sharService.minusingProcessor(minusCarrier, SharVo); // 더하기 처리 기능
+		List<SharValueObject> dumpMemList = sharService.selectDumpList(SharVo); // 공유 중인 회원
+		List<SharValueObject> nonSharMemList = sharService.selectNonSharList(SharVo, sharSapVo); // 공유 안 하는 회원
+		model.addAttribute("nonSharMemList", nonSharMemList);
+		model.addAttribute("dumpMemList", dumpMemList);
+		return "shar/sharForm";
+	}
+	
+	@RequestMapping(value = "/sharInsert.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharInsert(HttpSession session) throws Exception {
+		System.out.println("sharController의 sharInsert.do 작동");
+
+		SharValueObject SharVo = new SharValueObject();
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		SharVo.setSendMemSeq(userLoginInfo.getMemSeq());
+		
+		sharService.dumpToShar(SharVo);
+		return "redirect:/sharForm.do";
+	}
+	
+	@RequestMapping(value = "/sharCancel.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharCancel(HttpSession session) throws Exception {
+		System.out.println("sharController의 sharCancel.do 작동");
+
+		SharValueObject SharVo = new SharValueObject();
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		
+		sharService.dumpCancel(SharVo);
+		return "redirect:/sharForm.do";
+	}
+	@RequestMapping(value = "/sendTableForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	   public String aaa(Locale locale,Model model,HttpSession session) throws Exception { 
+			System.out.println("sharController의 sendTableForm.do 작동");
+			  session.getAttribute("userLoginInfo");
+			  MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+			  List<Integer> senderInfo = (List<Integer>) session.getAttribute("senderInfos");
+			SharValueObject SharVo = new SharValueObject();
+			SharVo.setMemSeq(userLoginInfo.getMemSeq());
+			List<SharValueObject> noneSendMemList = sharService.noneSendMemList(senderInfo, SharVo); // 공유 중인 회원
+			List<SharValueObject> sendMemList = sharService.sendMemList(senderInfo, SharVo); // 공유 중인 회원
+		 	logger.info("sendTableForm", locale);
+			model.addAttribute("noneSendMemList", noneSendMemList);
+			model.addAttribute("sendMemList", sendMemList);
+		  return "shar/sendTableForm";
+	   }
+
+	   @RequestMapping(value = "/sendSession.do", method={RequestMethod.GET, RequestMethod.POST})
+	   public String sendSession(Locale locale,Model model, HttpSession session, @RequestParam(value="sendCheckArray[]") List<Integer> sendCheckProcessing) throws Exception {
+		  System.out.println("sharController의 sendSession.do 작동");
+		 List<Integer> senderInfo = sendCheckProcessing;
+		  session.setAttribute("senderInfos", senderInfo);
+		   
+		  return "shar/sharForm";
+	   }
+	
+	@RequestMapping(value = "/sharRelsTableForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String sharRelsTableForm(Locale locale,Model model, HttpSession session) throws Exception {
+		System.out.println("sharController의 sharRelsTableForm.do 작동");
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		SharValueObject SharVo = new SharValueObject();
+		SharVo.setMemSeq(userLoginInfo.getMemSeq());
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		logger.info("sharRelsTableForm", locale);
+		List<SharValueObject> sharMemList = sharService.selectSharList(SharVo); // 공유 중인 회원
+		model.addAttribute("sharMemList", sharMemList);
+		return "shar/sharRelsTableForm";
+	}
+	
+	@RequestMapping(value = "/remvSharRecv.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String remvSharRecv(Locale locale,Model model, @RequestParam(value="Rels[]") List<String> RelsProcessing, HttpSession session) throws Exception {
+		System.out.println("sharController의 remvSharRecv.do 작동");
+
+		SharValueObject SharVo = new SharValueObject();
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		SharVo.setSendMemSeq(userLoginInfo.getMemSeq());
+		System.out.println(SharVo.getSendMemSeq()+"########");
+		
+
+		ArrayList<String> relsCarrier = new ArrayList<String>();
+		for(int i=0; i<RelsProcessing.size(); i++){
+			relsCarrier.add(RelsProcessing.get(i));
+			System.out.println("##########"+relsCarrier);
+		}
+		
+		sharService.remvSharRecv(relsCarrier, SharVo); // 공유 취소
+		return "redirect:/sharForm.do";
+	}
+	@RequestMapping(value = "/sendPlus.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String sendPlus(Locale locale,Model model, @RequestParam(value="sPlus[]") List<String> plusProcessing,HttpSession session ) throws Exception {
+		System.out.println("sharController의 sendPlus.do 작동");
+
+		SharValueObject SharVo = new SharValueObject();
+		List<Integer> senderInfo = (List<Integer>) session.getAttribute("senderInfos");
+		sharService.addSendRecv(senderInfo, plusProcessing ); // 더하기 처리 기능
+		List<SharValueObject> noneSendMemList = sharService.noneSendMemList(senderInfo, SharVo); // 공유 중인 회원
+		List<SharValueObject> sendMemList = sharService.sendMemList(senderInfo, SharVo); // 공유 중인 회원
+		model.addAttribute("noneSendMemList", noneSendMemList);
+		model.addAttribute("sendMemList", sendMemList);
+		return "shar/sharForm";
+	}
+	@RequestMapping(value = "/sendMinus.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String sendMinus(Locale locale,Model model, @RequestParam(value="sMinus[]") List<String> minusProcessing, HttpSession session ) throws Exception {
+		System.out.println("sharController의 sendMinus.do 작동");
+
+		SharValueObject SharVo = new SharValueObject();
+		  List<Integer> senderInfo = (List<Integer>) session.getAttribute("senderInfos");
+		sharService.remvSendRecv(senderInfo, minusProcessing ); // 더하기 처리 기능
+		List<SharValueObject> noneSendMemList = sharService.noneSendMemList(senderInfo, SharVo); // 공유 중인 회원
+		List<SharValueObject> sendMemList = sharService.sendMemList(senderInfo, SharVo); // 공유 중인 회원
+		model.addAttribute("noneSendMemList", noneSendMemList);
+		model.addAttribute("sendMemList", sendMemList);
+		return "shar/sharForm";
+	}
+	@RequestMapping(value = "/insertSend.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertSend(HttpSession session) throws Exception {
+		System.out.println("sharController의 insertSend.do 작동");
+
+		SharValueObject SharVo = new SharValueObject();
+		session.getAttribute("sessionNmeCardSeq");
+		NmeCardValueObject sessionNmeCardSeq = (NmeCardValueObject)session.getAttribute("sessionNmeCardSeq");
+		SharVo.setNmeCardSeq(sessionNmeCardSeq.getNmeCardSeq());
+		  List<Integer> senderInfo = (List<Integer>) session.getAttribute("senderInfos");
+		
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		SharVo.setSendMemSeq(userLoginInfo.getMemSeq());
+		sharService.InsertSend(senderInfo, SharVo); // 보내기 Insert
+		return "redirect:/sharForm.do";
+	}
+	@RequestMapping(value = "/cancelSend.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String cancelSend(HttpSession session) throws Exception {
+		System.out.println("sharController의 cancelSend.do 작동");
+		 List<Integer> senderInfo = (List<Integer>) session.getAttribute("senderInfos");
+		 sharService.cancelSend(senderInfo); // 보내기 Insert
+		return "redirect:/sharForm.do";
+	}
+}

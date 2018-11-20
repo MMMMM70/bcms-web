@@ -1,0 +1,340 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>BCMS - 명함 등록</title>
+		<link href="/resources/dist/css/bootstrap.css" rel="stylesheet">
+		<link href="/resources/dist/css/ui.css" rel="stylesheet" type="text/css">
+		<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="/resources/dist/css/css/normalize.css">
+		<link rel="stylesheet" href="/resources/dist/css/css/default.css">
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="/resources/dist/js/selectize/selectize.js"></script>
+		
+		<script type="text/javascript">
+			function insertNmeCard() {
+				//alert("등록");
+				if (document.getElementById("nmeCardLastNme").value==""){
+					alert("성을 입력하세요");
+				}
+				else if (document.getElementById("nmeCardFirstNme").value==""){
+					alert("이름을 입력하세요.")
+				}
+				else{
+				document.frm.action = "/insertNmeCard.do";
+				document.frm.submit();
+				}
+			}
+			
+			function nmeCardSelectForm() {
+				//alert("목록");
+				document.frm.action = "/nmeCardSelectForm.do";
+				document.frm.submit();
+			}
+			function insertEmail(){
+		        if (frm.email.value == '0') {
+		            frm.nmeCardEmail2.readonly = false;
+		            frm.nmeCardEmail2.value = '';
+		            frm.nmeCardEmail2.focus();
+		        }
+		        else {
+		            frm.nmeCardEmail2.readonly = true;
+		            frm.nmeCardEmail2.value = frm.email.value;
+		        }
+		    }
+			function insertSns(){
+		        if (frm.sns.value == '0') {
+		            frm.nmeCardSns2.readonly = false;
+		            frm.nmeCardSns2.value = '';
+		            frm.nmeCardSns2.focus();
+		        }
+		        else {
+		            frm.nmeCardSns2.readonly = true;
+		            frm.nmeCardSns2.value = frm.sns.value;
+		        }
+		    }
+			function insertMesngr(){
+		        if (frm.mesngr.value == '0') {
+		            frm.nmeCardMesngr2.readonly = false;
+		            frm.nmeCardMesngr2.value = '';
+		            frm.nmeCardMesngr2.focus();
+		        }
+		        else {
+		            frm.nmeCardMesngr2.readonly = true;
+		            frm.nmeCardMesngr2.value = frm.mesngr.value;
+		        }
+		    }
+			function popupOpen(){
+				var popUrl = "/nmeCardLicns.do";	//팝업창에 출력될 페이지 URL
+				var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+					window.open(popUrl,"",popOption);
+				}
+			function test(){
+				var qwer = $(".item");
+				for (var i = 0; i<qwer.length; i++){
+					alert($(qwer[i]).attr("data-value"));
+				}	
+			}
+		</script>
+		<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+		<script>
+		    function searchPostNum() {
+		        new daum.Postcode({
+		            oncomplete: function(data) {
+		                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+		
+		                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+		                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+		                var fullAddr = ''; // 최종 주소 변수
+		                var extraAddr = ''; // 조합형 주소 변수
+		
+		                // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+		                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+		                    fullAddr = data.roadAddress;
+		
+		                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+		                    fullAddr = data.jibunAddress;
+		                }
+		
+		                // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+		                if(data.userSelectedType === 'R'){
+		                    //법정동명이 있을 경우 추가한다.
+		                    if(data.bname !== ''){
+		                        extraAddr += data.bname;
+		                    }
+		                    // 건물명이 있을 경우 추가한다.
+		                    if(data.buildingName !== ''){
+		                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+		                    }
+		                    // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+		                    fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+		                }
+		
+		                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+		                document.getElementById('postNum').value = data.zonecode; //5자리 새우편번호 사용
+		                document.getElementById('bascAdrs').value = fullAddr;
+		
+		                // 커서를 상세주소 필드로 이동한다.
+		                document.getElementById('bascAdrs2').focus();
+		            }
+		        }).open();
+		    }
+		</script>
+	</head>
+	<body>
+		<div class="head">
+			<c:import url="/title.do"/>
+		</div>
+		<div class="body">
+			<div class="wrapper">
+				<form name="frm" method="post">
+					<input type="hidden" name="nmeCardMobil" value="010">
+					<input type="hidden" name="nmeCardSex" value="남자">
+					<aside>
+						<c:import url="/newSpeed.do"/>
+					</aside>
+					<div class="card">
+						<h3 class="page-header" style="border-bottom:0px">✴ 명함 등록</h3>
+						<article class="card-list">
+							<div class="col-lg-12" style="padding-left: 80px; padding-right: 80px;">
+								<table class="table" style="width:100%;">
+									<colgroup>
+										<col width="10%">
+										<col width="90%">
+									</colgroup>	
+									<tr>
+										<td class="text-left">
+											<p>성명</p>									
+											<p>
+												<img alt="이름" src="resources/img/name.png" width="20px" height="20px">
+												<font>* 성 </font><input class="form-control" style="width:100px; margin-right: 10px;" type="text" id="nmeCardLastNme" name="nmeCardLastNme" style="min-width:30px" size="5" required="required">
+												<font>* 이름 </font><input class="form-control" style="width:100px;" type="text" id="nmeCardFirstNme" name="nmeCardFirstNme" style="min-width:30px" size="5" required="required">
+											</p>
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+												<font style="margin-left: 23px;">성별 </font>
+												<select id="nmeCardSex" class="form-control" style="width:80px">
+													<option value="남자" <c:if test="${NmeCardValueObject.NmeCardSex == '018'}">selected="selected"</c:if> >남자</option>
+													<option value="여자" <c:if test="${NmeCardValueObject.NmeCardSex == '019'}">selected="selected"</c:if> >여자</option>           
+												</select>
+											</div>											
+										</td>
+									</tr>
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>회사</p>
+											<p>
+												<img alt="회사" src="resources/img/company.png" width="20px" height="20px">
+												<font>회사명 </font><input class="form-control" style="width:100px; margin-right: 10px;" type="text" size="16" name="CompnSeq" maxlength="20">
+												<font>부서 </font><input class="form-control" style="width:100px;" type="text" size="16" name="DeptSeq" maxlength="20">
+											</p>
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+											<font style="margin-left: 23px; margin-right: 15px;">직급 </font><input class="form-control" style="width:100px; margin-right: 10px;" type="text" size="16" name="postnSeq" maxlength="20">
+											<font>직무 </font><input class="form-control" style="width:100px;" type="text" size="16" name="jobSeq" maxlength="20">
+											</div>	
+										</td>								
+									</tr>
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>주소</p>
+											<p>
+												<img alt="주소" src="resources/img/juso.png" width="20px" height="20px">
+												<font>우편번호 </font>
+												<input class="form-control" id="postNum" placeholder="우편번호" style="text-align:center; width:100px;" maxlength="6" type="text" name="nmeCardPostNum">		
+												<input class="form-control"  id="bascAdrs" style="width:242px;" type="text" name="nmeCardBascAdrs" required="required">
+												<input class="btn btn-primary" type="button" style="margin-left: 10px;" onclick="searchPostNum()" value="우편번호 찾기">
+											</p>
+												<font style="margin-left: 23px; margin-right: 1px">상세주소 </font><input class="form-control" id="bascAdrs2" style="width:347px;" type="text" name="nmeCardDetlAdrs" required="required">
+										</td>
+									</tr>
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>연락처 </p>
+											<p>
+												<img alt="연락처" src="resources/img/tel.png" width="20px" height="20px">
+												<font style="margin-right: 13px;">휴대폰 </font><select id="nmeCardMobil" class="form-control" style="width:100px;">
+														<option value="010" <c:if test="${NmeCardValueObject.NmeCardMobil == '010'}">selected="selected"</c:if> >010</option>
+														<option value="011" <c:if test="${NmeCardValueObject.NmeCardMobil == '011'}">selected="selected"</c:if> >011</option>             
+														<option value="016" <c:if test="${NmeCardValueObject.NmeCardMobil == '016'}">selected="selected"</c:if> >016</option>
+														<option value="017" <c:if test="${NmeCardValueObject.NmeCardMobil == '017'}">selected="selected"</c:if> >017</option>
+														<option value="018" <c:if test="${NmeCardValueObject.NmeCardMobil == '018'}">selected="selected"</c:if> >018</option>
+														<option value="019" <c:if test="${NmeCardValueObject.NmeCardMobil == '019'}">selected="selected"</c:if> >019</option>            
+												</select>
+												<font> - </font><input style="width:100px;" class="form-control" type="text" name="nmeCardMobil2" size="10" maxlength="4">
+												<font> - </font><input style="width:100px;" class="form-control" type="text" name="nmeCardMobil3" size="10" maxlength="4">
+											</p>
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+												<p>
+													<font style="margin-left: 23px; margin-right: 28px;">전화 </font>		
+													<input style="width:100px" class="form-control" type="text" name="nmeCardTel" size="10" maxlength="4">
+													<font> - </font><input style="width:100px" class="form-control" type="text" name="nmeCardTel2" size="10" maxlength="4">
+													<font> - </font><input style="width:100px" class="form-control" type="text" name="nmeCardTel3" size="10" maxlength="4">
+												</p>
+												<p>
+													<font style="margin-left: 23px; margin-right: 28px;">팩스 </font>
+													<input style="width:100px;" class="form-control" type="text" name="nmeCardFax" size="10" maxlength="4">
+													<font> - </font><input style="width:100px" class="form-control" type="text" name="nmeCardFax2" size="10" maxlength="4">
+													<font> - </font><input style="width:100px" class="form-control" type="text" name="nmeCardFax3" size="10" maxlength="4">
+												</p>
+											</div>	
+										</td>
+									</tr>
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>네트워크</p>
+											<p>
+												<img alt="네트워크" src="resources/img/network.png" width="20px" height="20px">
+												<font style="margin-right: 13px;">이메일 </font><input class="form-control" style="width:100px" type="text" size="20" id="nmeCardEmail" name="nmeCardEmail">
+												@
+												<input class="form-control" style="width:100px" type="text" size="20" id="nmeCardEmail2" name="nmeCardEmail2">
+												<select id="email" class="form-control" style="width:120px;" onChange="insertEmail();">
+														<option value="0" selected>직접입력</option>					
+														<option value="naver.com">naver.com</option>
+														<option value="daum.net">daum.net</option>             
+														<option value="nate.com">nate.com</option>
+														<option value="hanmail.net">hanmail.net</option>
+														<option value="gamil.com">gmail.com</option>
+														<option value="hotmail.com">hotmail.com</option>
+														<option value="lycos.co.kr">lycos.co.kr</option>
+														<option value="empal.com">empal.com</option>
+														<option value="dreamwiz.com">dreamwiz.com</option>
+														<option value="korea.com">korea.com</option>       				
+												</select>
+											</p>
+											<p>
+												<font style="margin-left: 23px;">홈페이지 </font>
+												<input class="form-control" style="width:346px" type="text" size="20" id="nmeCardHompg" name="nmeCardHompg">
+											</p>
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+											<p>
+												<font style="margin-left:23px; margin-right: 28px;">SNS </font>
+												<input class="form-control" style="width:100px;" type="text" size="16" name="nmeCardSns" maxlength="20">
+												<input class="form-control" style="width:100px" type="text" size="20" id="nmeCardSns2" name="nmeCardSns2">
+												<select id="sns" class="form-control" style="width:120px" onChange="insertSns();">
+														<option value="0" selected>직접입력</option>					
+														<option value="카카오스토리">카카오스토리</option>
+														<option value="페이스북">페이스북</option>             
+														<option value="트위터">트위터</option>
+														<option value="Tumblr">Tumblr</option>
+														<option value="Pinterest">Pinterest</option>
+														<option value="StumbleUpon">StumbleUpon</option>
+														<option value="reddit is fun">reddit is fun</option>
+														<option value="Instagram">Instagram</option>
+														<option value="LinkedIn">LinkedIn</option>
+														<option value="BAND">BAND</option>       				
+												</select>
+											</p>
+											<p>
+												<font style="margin-left:23px;margin-right: 14px;">메신저 </font>
+												<input class="form-control" style="width:100px;" type="text" size="16" name="nmeCardMesngr" maxlength="20">
+												<input class="form-control" style="width:100px" type="text" size="20" id="nmeCardMesngr2" name="nmeCardMesngr2">
+												<select id="mesngr" class="form-control" style="width:120px" onChange="insertMesngr();">
+														<option value="0" selected>직접입력</option>					
+														<option value="카카오톡">카카오톡</option>
+														<option value="라인">라인</option>             
+														<option value="탱고">탱고</option>
+														<option value="위챗">위챗</option>
+														<option value="바이버">네이버</option>
+														<option value="왓츠앱">왓츠앱</option>
+														<option value="마이피플">마이피플</option>
+														<option value="네이트온">네이트온</option>
+														<option value="스카이프">스카이프</option>       				
+												</select>
+											</p>
+											</div>	
+										</td>
+									</tr>
+									<tr>
+										<td class="text-left" style="width:100%">
+											<font style="margin-right: 13px;">기타 </font>
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+											<p>
+												<font style="margin-left:23px; margin-right: 28px;">취미 </font>
+												<input class="form-control" style="width:100px;" type="text" size="16" name="nmeCardHob" maxlength="20">
+											</p>
+											<p>
+												<font style="margin-left:23px;margin-right: 14px;">관심사 </font>
+												<input class="form-control" style="width:100px;" type="text" size="16" name="nmeCardInterst" maxlength="20">
+											</p>
+											<p>
+												<font style="margin-left:23px;margin-right: 14px; float:left">자격증 </font>				
+												<div style="float:left; margin-left:4px; width:900px">							
+												    <select id="bear" name="dd" multiple class="demo-default">
+														<c:forEach items="${selectLicnsList}" var="item">
+															<option value="${item.licnsNme}">${item.licnsNme}</option>
+														</c:forEach>
+													</select>
+													<script>
+													$('#bear').selectize({
+													});
+													</script>
+													<input type ="button" value="실험" onclick="javascript:test()">	
+												</div>
+											</p>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="form-group col-sm-12" style="text-align:right; padding-right:80px">
+								<input class="btn btn-default" type="button" value="등록" onclick="javascript:insertNmeCard()">
+								<input class="btn btn-white" type="button" value="취소" onclick="javascript:nmeCardSelectForm()">
+							</div>
+						</article>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

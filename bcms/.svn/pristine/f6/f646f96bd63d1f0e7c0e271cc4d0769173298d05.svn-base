@@ -1,0 +1,42 @@
+package net.su.shar.dataAccessObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.su.shar.valueObject.SharValueObject;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class SharDataAccessObject extends SqlSessionDaoSupport {
+
+	public List<SharValueObject> selectDumpList(int nmeCardSeq){
+		List<SharValueObject> dumpMemList = getSqlSession().selectList("sharMapper.dumpMemList", nmeCardSeq);
+		return dumpMemList;
+	}
+	public List<SharValueObject> selectNonSharList(int nmeCardSeq){
+		List<SharValueObject> nonSharMemList = getSqlSession().selectList("sharMapper.nonSharMemList", nmeCardSeq);
+		return nonSharMemList;
+	}
+	public List<SharValueObject> selectMemList(int nmeCardSeq){
+		List<SharValueObject> selectMemList = getSqlSession().selectList("sharMapper.selectMemList", nmeCardSeq);
+		return selectMemList; 
+	}
+	public void plusingProcessor(SharValueObject VO){
+		getSqlSession().delete("sharMapper.deleteDump", VO);
+		getSqlSession().insert("sharMapper.insertDump", VO); // 임시 저장소에 추가	
+	}
+	public void minusingProcessor(SharValueObject VO){
+		getSqlSession().delete("sharMapper.deleteDump", VO); // dump에서 삭제
+		
+	}
+	public void dumpToShar(int nmeCardSeq){
+		getSqlSession().insert("sharMapper.dumpToShar", nmeCardSeq);// dump에서 insert로.
+		getSqlSession().insert("sharMapper.newSpeedSharInsert", nmeCardSeq);// dump에서 insert로.
+		getSqlSession().delete("sharMapper.dumpCleaning", nmeCardSeq);// dump 청소.
+	}
+	public void dumpCancel(int nmeCardSeq){
+		getSqlSession().delete("sharMapper.dumpCleaning", nmeCardSeq);// dump 청소.
+	}
+}

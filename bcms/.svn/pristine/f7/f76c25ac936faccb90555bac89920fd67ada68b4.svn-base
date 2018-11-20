@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="groupMapper">
+	<resultMap id="groupValues" type="groupVo">
+		<result property="gropSeq" column="grop_seq"/>
+		<result property="gropNme" column="grop_nme"/>
+		<result property="gropCretDate" column="grop_cret_date"/>
+		<result property="gropMemSeq" column="grop_mem_seq"/>
+		<result property="gropMemCretDate" column="grop_mem_cret_date"/>
+		<result property="memSeq" column="mem_seq"/>
+		<result property="memNme" column="mem_nme"/>
+		<result property="memDepmtNme" column="mem_depmt_nme"/>
+		<result property="memPostnNme" column="mem_postn_nme"/>
+		<result property="memMobil" column="mem_mobil"/>
+		<result property="memEmail" column="mem_email"/>
+	</resultMap>
+	
+		<insert id="groupInsert" parameterType="groupVo">
+			INSERT 
+			INTO 
+			grop_tb(
+			grop_seq
+			, grop_nme
+			, mem_seq
+			, grop_cret_date)
+			VALUES(
+			(SELECT IFNULL(MAX(grop_seq),0)+1 FROM grop_tb AS a)
+			, #{gropNme}
+			, #{memSeq}
+			, SYSDATE());
+		</insert>
+		
+		<select id="groplist" parameterType="groupVo" resultMap="groupValues">
+			SELECT *
+			FROM grop_tb
+			WHERE mem_seq = #{memSeq};
+		</select>
+		
+		<select id="groupWholeList" parameterType="groupVo" resultMap="groupValues">
+			SELECT *
+			FROM mem_tb
+			WHERE mem_seq != #{memSeq};
+		</select>
+</mapper>

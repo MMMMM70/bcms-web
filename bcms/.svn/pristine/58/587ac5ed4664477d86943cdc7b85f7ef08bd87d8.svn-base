@@ -1,0 +1,11 @@
+package net.su.login.service;
+
+import net.su.login.valueObject.MemValueObject;
+
+public interface MemService {
+
+	public int confirm(MemValueObject memValueObject) throws Exception;
+	
+	public MemValueObject selectMemInfo(MemValueObject memValueObject) throws Exception;
+	
+}

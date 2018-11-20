@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="memMapper">
+	<resultMap id="memValues" type="memVo">
+		<result property="memSeq" column="mem_seq"/>
+		<result property="memId" column="mem_id"/>
+		<result property="memPw" column="mem_pw"/>
+		<result property="memName" column="mem_nme"/>
+		<result property="memContact" column="mem_contact"/>
+	</resultMap>
+	
+	<select id="confirm" parameterType="memVo" resultType="int">
+		SELECT
+			COUNT(mem_seq)
+		FROM
+		mem_tb
+		WHERE
+			mem_id = #{memId}
+		AND
+			mem_pw = #{memPw};
+	</select>
+	
+	<select id="selectMemInfo" parameterType="memVo" resultMap="memValues">
+		SELECT
+			  mem_seq
+			, mem_id
+			, mem_nme
+		FROM
+		mem_tb
+		WHERE
+			mem_id = #{memId}
+		AND
+			mem_pw = #{memPw};
+	</select>
+	
+	<update id="updateMemInfo" parameterType="memVo">
+		UPDATE
+		mem_tb 
+		SET
+			  mem_pw = #{memPw}
+			, mem_nme = #{memName}
+ 		WHERE
+ 			mem_seq = #{memSeq};
+	</update>
+</mapper>

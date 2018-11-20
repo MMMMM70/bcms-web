@@ -1,0 +1,73 @@
+package net.su.login.dataAccessObject;
+
+import java.util.List;
+
+import net.su.login.valueObject.MemValueObject;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class MemDataAccessObject extends SqlSessionDaoSupport {
+
+	public int confirm(MemValueObject memValueObject) throws Exception {
+		System.out.println("MemDataAccessObject의 confirm() 작동");
+		int confirm = getSqlSession().selectOne("memMapper.confirm", memValueObject);
+		return confirm;
+	}
+	
+	public MemValueObject selectMemInfo(MemValueObject memValueObject) throws Exception {
+		System.out.println("MemDataAccessObject의 selectMemInfo() 작동");
+		memValueObject = getSqlSession().selectOne("memMapper.selectMemInfo", memValueObject);
+		return memValueObject;
+	}
+	
+	//회사 고유값 생성
+	public int selectMemCompnSeq()throws Exception{
+		System.out.println("MemDataAccessObject의 MemCompnSeq()작동");
+		int memCompnSeq = getSqlSession().selectOne("memMapper.selectCompnSeq");
+		return memCompnSeq;
+	}
+	
+	//회사 등록
+	public void insertCompn (MemValueObject memValueObject) throws Exception{
+		System.out.println(memValueObject.getMemCompnNme()+"회사이름");
+		memValueObject=getSqlSession().selectOne("memMapper.insertCompn", memValueObject);
+	}
+	
+	//부서 고유값 생성
+	public int selectMemDepmtSeq()throws Exception{
+		System.out.println("MemDataAccessObject의 selectMemDepmtSeq()작동");
+		int selectMemDepmtSeq = getSqlSession().selectOne("memMapper.selectMemDepmtSeq");
+		return selectMemDepmtSeq;
+	}
+	
+	//부서 등록
+	public void insertDepmt (MemValueObject memValueObject) throws Exception{
+		System.out.println(memValueObject.getMemDepmtNme()+"부서이름");
+		memValueObject=getSqlSession().selectOne("memMapper.insertDepmt", memValueObject);
+	}
+	
+	//회원 고유값 생성
+	public int selectMemSeq()throws Exception{
+		System.out.println("MemDataAccessObjewct의 selectMemSeq()작동");
+		int selectMemSeq = getSqlSession().selectOne("memMapper.selectMemSeq");
+		return selectMemSeq;
+	}
+	
+	//회원 등록
+	public void insertMembership (MemValueObject memValueObject) throws Exception{
+		System.out.println(memValueObject.getMemSeq()+"부서이름");
+		memValueObject=getSqlSession().selectOne("memMapper.insertMembership", memValueObject);
+	}
+	
+	//부서 ajax
+	public List<MemValueObject> memCompnList() throws Exception{
+		
+		MemValueObject memValueObject = new MemValueObject();
+		List<MemValueObject> memCompnList = getSqlSession().selectList("memMapper.memCompnList", memValueObject);
+		
+		return memCompnList;
+	}
+}
+

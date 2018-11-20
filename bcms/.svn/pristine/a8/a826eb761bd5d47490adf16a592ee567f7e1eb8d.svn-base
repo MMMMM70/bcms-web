@@ -1,0 +1,148 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="/resources/dist/css/ui.css" type="text/css">
+	<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script type="text/javascript">
+		function bbsInsertForm() {
+			//alert("글쓰기");
+			document.frm.action = "/bbsInsertForm.do";
+			document.frm.submit();
+		}
+		
+		function bbsViewForm(bbsSeq) {
+			//alert("상세보기");
+			var searchWrd = document.getElementById("searchWrd").value;
+			var searchCnd = document.getElementById("searchCnd").value;
+			//alert("상세보기"+bbsSeq+"//"+searchCnd+"//"+searchWrd);
+			document.frm.bbsSeq.value = bbsSeq;
+			document.frm.searchCnd.value = searchCnd;
+			document.frm.searchWrd.value = searchWrd;
+			//alert("상세보기");
+			document.frm.action = "/bbsViewForm.do";
+			document.frm.submit();
+		}
+		
+		function bbsListForm(page) {
+			//alert("페이지 이동"+page);
+			var searchWrd = document.getElementById("searchWrd").value;
+			var searchCnd = document.getElementById("searchCnd").value;
+			document.frm.currentPageNo.value = page;
+			document.frm.searchCnd.value = searchCnd;
+			document.frm.searchWrd.value = searchWrd;
+			document.frm.action = "/bbsListForm.do";
+			document.frm.submit();
+		}
+	</script>
+	
+	</head>
+	<body>
+		<div class="head">
+			<c:import url="/title.do"/>
+		</div>
+		<form name="frm" method="post">
+			<input type="hidden" name="bbsSeq" value="0">
+			<input type="hidden" name="currentPageNo" value="${searchAndPageValueObject.currentPageNo}">
+			<input type="hidden" name="searchCnd" value="0">
+			<input type="hidden" name="searchWrd" value="">
+		</form>
+		<div class="body">
+			<div class ="wrapper">
+				<aside>
+					<c:import url="/newSpeed.do"/>
+				</aside>
+				<div class="card">
+					<article class="card-list">
+						<div>
+						<h3 class="page-header">* 내 명함 리스트
+							<div class="form-group" align="right" style="width:400px; border:1px solid; float:right">
+								<table>
+									<tr>
+										<td>
+											<select id="searchCnd" class="form-control" style="width:100px; float:left">
+											<option value="0" <c:if test="${searchAndPageValueObject.searchCnd == '0'}">selected="selected"</c:if> >제목</option>
+											<option value="1" <c:if test="${searchAndPageValueObject.searchCnd == '1'}">selected="selected"</c:if> >내용</option>             
+											<option value="2" <c:if test="${searchAndPageValueObject.searchCnd == '2'}">selected="selected"</c:if> >작성자</option>            
+											</select>
+										</td>
+										<td>
+											<div class="input-group" style="padding-left:5px;">
+												<input type="text" class="form-control" id="searchWrd" maxlength="60" value="${searchAndPageValueObject.searchWrd}">
+												<span class="input-group-btn">
+													<button class="btn btn-default" type="button" onclick="javascript:bbsListForm(1)">검색</button>
+												</span>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</h3>	
+						</div>
+							<div style="min-height:400px; padding-left:35px">
+								<div class="product-list" >
+									<ul id="productList">
+										<li id="3002284405">
+										<a href="javascript:bbsInsertForm()" onmouseover="this.style.color='#428BCA'" onmouseout="this.style.color='#333333'">
+											<table class="tb-radius" id="card" style="width:220px; height:150px">
+												<tr><td>등록</td></tr>
+												<tr><td>등록 </td></tr>
+												<tr><td>등록</td></tr>
+												<tr><td>등록</td></tr>
+											</table>
+										</a>
+										</li>
+										<c:forEach var="selectBbsList" items="${selectBbsList}" varStatus="status">
+											<li id="3002284405" style="margin-left:20px;">
+												<input type="checkbox" name="chk_info" value="HTML">
+												<div id="cardBox">
+												<table class="tb-radius" id="card">
+													<tr><td>글번호 : <c:out value="${searchAndPageValueObject.totalRecordCount-searchAndPageValueObject.firstRecordIndex-status.index}"/></td></tr>
+													<tr><td><a href="javascript:bbsViewForm(${selectBbsList.bbsSeq})">제목 : <c:out value="${selectBbsList.bbsTitle}"/></a> </td></tr>
+													<tr><td>작성자 : <c:out value="${selectBbsList.bbsWriter}"/></td></tr>
+													<tr><td>작성일 : <c:out value="${selectBbsList.bbsDate}"/></td></tr>
+												</table>
+												</div>
+											</li>
+										</c:forEach>
+										
+										<div class="dataTables_paginate paging_simple_numbers" align="center">
+											<c:if test="${searchAndPageValueObject.lastPageNoOnPageList != 1}">
+											<ul class="pagination">
+												<c:if test="${searchAndPageValueObject.totalPageCount > 1 && searchAndPageValueObject.currentPageNo != 1}">
+													<li class="paginate_button previous"><a href="javascript:bbsListForm(1)">&laquo;</a></li>
+													<li class="paginate_button previous"><a href="javascript:bbsListForm(${searchAndPageValueObject.currentPageNo-1})">&lsaquo;</a></li>
+												</c:if>
+											
+												<c:forEach var="page" begin="${searchAndPageValueObject.firstPageNoOnPageList}" end="${searchAndPageValueObject.lastPageNoOnPageList}">
+													<c:if test="${page == searchAndPageValueObject.currentPageNo}">
+														<li class="paginate_button active"><a href="javascript:bbsListForm(${page})">${page}</a></li>
+													</c:if>
+													<c:if test="${page != searchAndPageValueObject.currentPageNo}">
+														<li class="paginate_button"><a href="javascript:bbsListForm(${page})">${page}</a></li>
+													</c:if>
+												</c:forEach>
+											
+												<c:if test="${searchAndPageValueObject.totalPageCount > 1 && searchAndPageValueObject.totalPageCount != searchAndPageValueObject.currentPageNo}">
+													<li class="paginate_button next"><a href="javascript:bbsListForm(${searchAndPageValueObject.currentPageNo+1})">&rsaquo;</a></li>
+													<li class="paginate_button next"><a href="javascript:bbsListForm(${searchAndPageValueObject.totalPageCount})">&raquo;</a></li>
+												</c:if>
+											</ul>
+											</c:if>
+										</div>
+										
+										
+									</ul>
+								</div>
+							</div>
+					</article>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

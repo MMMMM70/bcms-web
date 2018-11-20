@@ -1,0 +1,16 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<div class="wrapper" style="width:625px; float:left;">
+			<input type="button" class="btn btn-default" onclick="iframe_a.location='/sharNmeCardComnctnSelectForm.do?nmeCardSeq=${NmeCardSeq}';document.getElementById('hear')" value="communication">
+			<iframe src="/sharNmeCardComnctnSelectForm.do?nmeCardSeq=${NmeCardSeq}" width="625px" height="625px" name="iframe_a" frameborder="0" ID="hear"></iframe>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,7 @@
+INDEX VERSION 1.3+C:\Users\MinA\workspace\project_bcms\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+2481646619.index
+844878567.index
+2780329664.index
+2133521336.index
+1144920842.index
+4179667530.index

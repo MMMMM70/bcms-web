@@ -1,0 +1,20 @@
+package net.su.bcms.service;
+
+import java.util.List;
+
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+import net.su.bcms.valueObject.ComnctnNmeCardValueObject;
+import net.su.bcms.valueObject.ComnctnSearchAndPageValueObject;
+
+public interface RecvNmeCardService {
+	
+	//받은 명함 리스트
+	public List<NmeCardValueObject> selectRecvNmeCardList(SearchAndPageValueObject searchAndPageValueObject) throws Exception;
+	
+	//받은 명함 상세보기
+	public NmeCardValueObject selectRecvNmeCardView(NmeCardValueObject nmeCardValueObject) throws Exception;
+
+	//받은 명함 커뮤니케이션 리스트
+	public List<ComnctnNmeCardValueObject> selectRecvNmeCardComntnList(ComnctnSearchAndPageValueObject comnctnSearchAndPageValueObject) throws Exception;
+}

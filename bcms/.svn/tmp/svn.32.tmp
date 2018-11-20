@@ -1,0 +1,127 @@
+package net.su.bcms.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.su.bcms.dataAccessObject.NmeCardDataAccessObject;
+import net.su.bcms.valueObject.ComnctnNmeCardValueObject;
+import net.su.bcms.valueObject.NmeCardHistrValueObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+import net.su.logger.Logger;
+
+import org.springframework.stereotype.Service;
+
+@Service
+
+public class NmeCardServiceimpl implements NmeCardService {
+
+	@Resource
+	private NmeCardDataAccessObject nmeCardDataAccessObject;
+	
+	//명함 등록완료
+	public void insertNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception {
+		Logger.info(null);
+		nmeCardDataAccessObject.insertNmeCard(nmeCardValueObject);
+	}
+	
+	//명함 등록완료
+	public void insertNmeCardHistr(NmeCardValueObject nmeCardValueObject) throws Exception {
+		Logger.info(null);
+		nmeCardDataAccessObject.insertNmeCardHistr(nmeCardValueObject);
+	}
+	
+	//커뮤니케이션 등록완료
+	public void insertNmeCardComnctn(ComnctnNmeCardValueObject comnctnNmeCardValueObject) throws Exception {
+		Logger.info(null);
+		System.out.println("쉼표가뜨는지 확인하는 서비스"+comnctnNmeCardValueObject.getComnctnType());
+		nmeCardDataAccessObject.insertNmeCardComnctn(comnctnNmeCardValueObject);
+	}
+	
+	//명함 리스트 조회
+	public List<NmeCardValueObject> selectNmeCardList(NmeCardValueObject nmeCardValueObject) throws Exception {
+		Logger.info(null);
+		int selectNmeCardCount = nmeCardDataAccessObject.selectNmeCardCount(nmeCardValueObject);
+		List<NmeCardValueObject> selectNmeCardList = nmeCardDataAccessObject.selectNmeCardList(nmeCardValueObject);
+		nmeCardValueObject.setTotalRecordCount(selectNmeCardCount);
+		return selectNmeCardList;
+	}
+	
+	//명함 변경내역 리스트 조회
+	public List<NmeCardValueObject> selectNmeCardHistrList(NmeCardValueObject nmeCardValueObject) throws Exception {
+		Logger.info(null);
+		int selectNmeCardHistrCount = nmeCardDataAccessObject.selectNmeCardHistrCount(nmeCardValueObject);
+		List<NmeCardValueObject> selectNmeCardHistrList = nmeCardDataAccessObject.selectNmeCardHistrList(nmeCardValueObject);
+		nmeCardValueObject.setTotalRecordCount(selectNmeCardHistrCount);
+		return selectNmeCardHistrList;
+	}
+	
+	//명함 상세조회
+	public NmeCardValueObject selectNmeCardView(NmeCardValueObject nmeCardValueObject) throws Exception {
+		Logger.info(null);
+		NmeCardValueObject selectNmeCardView = nmeCardDataAccessObject.selectNmeCardView(nmeCardValueObject.getNmeCardSeq());
+		selectNmeCardView.setCurrentPageNo(nmeCardValueObject.getCurrentPageNo());
+		selectNmeCardView.setSearchCnd(nmeCardValueObject.getSearchCnd());
+		selectNmeCardView.setSearchAry(nmeCardValueObject.getSearchAry());
+		selectNmeCardView.setSearchWrd(nmeCardValueObject.getSearchWrd());
+		return selectNmeCardView;
+	}
+	
+	//명함 변경내역 상세조회
+	public NmeCardHistrValueObject selectNmeCardHistrView(NmeCardHistrValueObject nmeCardHistrValueObject) throws Exception {
+		Logger.info(null);
+		NmeCardHistrValueObject selectNmeCardHistrView = nmeCardDataAccessObject.selectNmeCardHistrView(nmeCardHistrValueObject.getNmeCardHistrSeq());
+		return selectNmeCardHistrView;
+	}
+	
+	//명함 수정완료
+	public void updateNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception {
+		Logger.info(null);
+		nmeCardDataAccessObject.updateNmeCard(nmeCardValueObject);
+	}
+	
+	//명함 삭제완료
+	public void deleteNmeCard(ArrayList<Integer> deleteArray) throws Exception{
+		Logger.info(null);
+		nmeCardDataAccessObject.deleteNmeCard(deleteArray);
+	}
+	
+	//명함 완전삭제완료
+	public void deleteNmeCardBin(ArrayList<Integer> deleteArray) throws Exception{
+		Logger.info(null);
+		nmeCardDataAccessObject.deleteNmeCardBin(deleteArray);
+	}
+	
+	//명함 복원
+	public void recvyNmeCardBin(ArrayList<Integer> deleteArray) throws Exception{
+		Logger.info(null);
+		nmeCardDataAccessObject.recvyNmeCardBin(deleteArray);
+	}
+	
+	//명함 자격증 목록
+	public List<NmeCardValueObject> selectLicnsList() throws Exception {
+		Logger.info(null);
+		List<NmeCardValueObject> selectLicnsList = nmeCardDataAccessObject.selectLicnsList();
+		System.out.println();
+		return selectLicnsList;
+	}
+	
+	//명함 커뮤니케이션 리스트 조회
+	public List<ComnctnNmeCardValueObject> selectNmeCardComnctnList(ComnctnNmeCardValueObject ComnctnNmeCardValueObject) throws Exception {
+		System.out.println("NmeCardServiceimpl의 selectNmeCardList()작동");
+		List<ComnctnNmeCardValueObject> selectNmeCardComnctnList = nmeCardDataAccessObject.selectNmeCardComnctnList(ComnctnNmeCardValueObject);
+		return selectNmeCardComnctnList;
+	}
+	//명함 상세조회
+	public List<ComnctnNmeCardValueObject> selectNmeCardComnctnView(ComnctnNmeCardValueObject comnctnNmeCardValueObject) throws Exception {
+		Logger.info(null);
+		List<ComnctnNmeCardValueObject> selectNmeCardComnctnView = nmeCardDataAccessObject.selectNmeCardComnctnView(comnctnNmeCardValueObject);
+//		selectNmeCardComnctnView.setCurrentPageNo(comnctnNmeCardValueObject.getCurrentPageNo());
+//		selectNmeCardComnctnView.setSearchCnd(comnctnNmeCardValueObject.getSearchCnd());
+//		selectNmeCardComnctnView.setSearchAry(comnctnNmeCardValueObject.getSearchAry());
+//		selectNmeCardComnctnView.setSearchWrd(comnctnNmeCardValueObject.getSearchWrd());
+		return selectNmeCardComnctnView;
+	}
+}

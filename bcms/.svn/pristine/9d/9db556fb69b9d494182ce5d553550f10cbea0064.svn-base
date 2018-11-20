@@ -1,0 +1,20 @@
+package net.su.bcms.service;
+
+import java.util.List;
+
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+
+public interface NmeCardService {
+
+	public void insertNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception;
+	
+	public List<NmeCardValueObject> selectNmeCardList(SearchAndPageValueObject searchAndPageValueObject) throws Exception;
+	
+	public NmeCardValueObject selectNmeCardView(NmeCardValueObject nmeCardValueObject) throws Exception;
+	
+	public void updateNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception;
+	
+	public void deleteNmeCard(int nmeCardSeq) throws Exception;
+	
+}

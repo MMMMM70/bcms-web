@@ -1,0 +1,9 @@
+package net.su.base.service;
+
+import java.util.List;
+
+import net.su.base.valueObject.BaseValueObject;
+
+public interface BaseService {
+	public List<BaseValueObject> newspeedSelect() throws Exception;
+}

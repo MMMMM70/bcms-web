@@ -1,0 +1,32 @@
+package net.su.bcms.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.su.bcms.valueObject.ComnctnNmeCardValueObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+
+public interface NmeCardService {
+	
+	//명함 등록 완료
+	public void insertNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception;
+	
+	//명함 리스트 조회
+	public List<NmeCardValueObject> selectNmeCardList(NmeCardValueObject nmeCardValueObject) throws Exception;
+	
+	//명함 상세조회
+	public NmeCardValueObject selectNmeCardView(NmeCardValueObject nmeCardValueObject) throws Exception;
+	
+	//명함 수정 완료
+	public void updateNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception;
+	
+	//명함 삭제 완료
+	public void deleteNmeCard(ArrayList<Integer> deleteArray) throws Exception;
+	
+	//명함 자격증 목록
+	public List<NmeCardValueObject> selectLicnsList() throws Exception;	
+	
+	//커뮤니케이션 리스트 조회
+	public List<ComnctnNmeCardValueObject> selectNmeCardComnctnList(ComnctnNmeCardValueObject ComnctnNmeCardValueObject) throws Exception;
+}

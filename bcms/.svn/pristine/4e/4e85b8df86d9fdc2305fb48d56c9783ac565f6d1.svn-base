@@ -1,0 +1,92 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script type="text/javascript">
+	function bbs_update_form() {
+		//alert("수정");
+		document.bbsView.action = "/bbsUpdateForm.do";
+		document.bbsView.submit();
+	}
+	
+	function bbs_list_form() {
+		//alert("목록");
+		document.bbsView.action = "/bbsListForm.do";
+		document.bbsView.submit();
+	}
+	
+	function deleteBbs() {
+		//alert("삭제");
+		document.bbsView.action = "/deleteBbs.do";
+		document.bbsView.submit();
+	}
+</script>
+</head>
+	<body>
+		<div>
+			<c:import url="/bbsListForm.do"/>
+		</div>
+		<div style="width:70%; margin-left:15%; margin-right:15%;">
+			<form name="bbsView" method="post">
+				<input type="hidden" name="bbsSeq" value="${selectBbsView.bbsSeq}">
+				<input type="hidden" name="currentPageNo" value="${selectBbsView.currentPageNo}">
+				<input type="hidden" name="searchCnd" value="${selectBbsView.searchCnd}">
+				<input type="hidden" name="searchWrd" value="${selectBbsView.searchWrd}">
+			</form>
+			<div class="col-lg-12">
+				<h3 class="page-header">상세보기</h3>
+			</div>
+			<div class="col-lg-12">
+				<table class="table" style="width:100%;">
+					<colgroup>
+						<col width="10%">
+						<col width="90%">
+					</colgroup>
+					<tr style = "height:35px;">
+						<th class="text-center">제목</th>
+						<td style="text-align:left;">${selectBbsView.bbsTitle}<input type="hidden" name="qna_title" value="${selectBbsView.bbsTitle}"></td>
+					</tr>
+					<tr style = "height:35px;">
+						<th class="text-center">작성자</th>
+						<td style="text-align:left;">${selectBbsView.bbsWriter}<input type="hidden" name="bbs_writer" value="${selectBbsView.bbsWriter}"></td>
+					</tr>
+					<tr style = "height:35px;">
+						<th class="text-center">내용</th>
+						<td style="text-align:left;">${selectBbsView.bbsContents}<input type="hidden" name="bbs_contents" value="${selectBbsView.bbsContents}"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="form-group col-sm-12" style="text-align:right;">
+				<input class="btn btn-default" type="button" value="수정" onclick="javascript:bbs_update_form()">
+				<input class="btn btn-primary" type="button" value="삭제" onclick="javascript:deleteBbs()">
+				<input class="btn btn-default" type="button" value="목록" onclick="javascript:bbs_list_form()">
+			</div>
+			<div style="width:70%; margin-left:15%; margin-right:15%;">
+				<table style="width:100%;">
+					<colgroup>
+						<col width="20%">
+						<col width="80%">
+					</colgroup>
+					<tr style = "height:35px;">
+						<td style="text-align:left;"><input class="form-control" type="text" name="bbsTitle" maxlength="20"></td>
+						<td style="text-align:left;">
+							<div class="input-group" style="padding-left:5px;">
+								<input class="form-control" type="text" name="bbsTitle" maxlength="20">
+								<span class="input-group-btn">
+									<input class="btn btn-default" type="button" value="댓글등록" onclick="javascript:bbs_list_form()">
+								</span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

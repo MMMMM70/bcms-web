@@ -1,0 +1,101 @@
+package net.su.bcms.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import net.su.bcms.service.NmeCardService;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+@Controller
+public class NmeCardController {
+	
+	@Resource
+	private NmeCardService nmeCardService;
+	
+	//임시 시작 .do
+	@RequestMapping(value = "/homsss.do", method = RequestMethod.GET)
+	public String home() {
+		return "home";
+	}
+	//커뮤니케이션 상세보기
+	@RequestMapping(value = "/nmeCardComnctnViewForm.do", method = RequestMethod.POST)
+	public String a() {
+		System.out.println("내닷두는 도는거니???");
+		return "nmeCard/nmeCardComnctnViewForm";
+	}
+	
+	@RequestMapping(value = "/nmeCardLicns.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String nmeCardLicns(ModelMap model)throws Exception {
+		List<NmeCardValueObject> selectLicnsList = nmeCardService.selectLicnsList();
+		model.addAttribute("selectLicnsList", selectLicnsList);
+		return "nmeCard/nmeCardLicns";
+	}
+	
+	@RequestMapping(value = "/nmeCardInsertForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String nmeCardInsertForm(@ModelAttribute("nmeCardValueObject") NmeCardValueObject nmeCardValueObject, ModelMap model) throws Exception {
+		System.out.println("nmeCardController의 nmeCardInsertForm.do 작동");
+		List<NmeCardValueObject> selectLicnsList = nmeCardService.selectLicnsList();
+		model.addAttribute("selectLicnsList", selectLicnsList);
+		return "nmeCard/nmeCardInsertForm";
+	}
+	
+	@RequestMapping(value = "/insertNmeCard.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception {
+		System.out.println("nmeCardController의 insertNmeCard.do 작동");
+		nmeCardService.insertNmeCard(nmeCardValueObject);
+		return "redirect:/nmeCardSelectForm.do";
+	}
+	
+	@RequestMapping(value = "/nmeCardSelectForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String nmeCardSelectForm(SearchAndPageValueObject searchAndPageValueObject, ModelMap model, HttpSession session) throws Exception {
+		System.out.println("nmeCardController의 nmeCardSelectForm.do 작동" + searchAndPageValueObject.getFirstRecordIndex());
+		List<NmeCardValueObject> selectNmeCardList = nmeCardService.selectNmeCardList(searchAndPageValueObject);
+		model.addAttribute("selectNmeCardList", selectNmeCardList);
+		return "nmeCard/nmeCardSelectForm";
+	}
+	
+	@RequestMapping(value = "/nmeCardSelectViewForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String nmeCardViewForm(@ModelAttribute("nmeCardValueObject") NmeCardValueObject nmeCardValueObject, ModelMap model) throws Exception {
+		System.out.println("nmeCardController의 nmeCardSelectViewForm.do 작동");
+		nmeCardValueObject = nmeCardService.selectNmeCardView(nmeCardValueObject);
+		model.addAttribute("selectNmeCardView", nmeCardValueObject);
+		return "nmeCard/nmeCardSelectViewForm";
+	}
+	
+	@RequestMapping(value = "/nmeCardUpdateForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String nmeCardUpdateForm(@ModelAttribute("nmeCardValueObject") NmeCardValueObject nmeCardValueObject, ModelMap model) throws Exception {
+		System.out.println("NmeCardController의 nmeCardUpdateForm.do 작동"+nmeCardValueObject.getNmeCardSeq());
+		NmeCardValueObject selectNmeCardView = nmeCardService.selectNmeCardView(nmeCardValueObject);
+		model.addAttribute("selectNmeCardView", selectNmeCardView);
+		return "nmeCard/nmeCardUpdateForm";
+	}
+	
+	@RequestMapping(value = "/updateNmeCard.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateNmeCard(@ModelAttribute("nmeCardValueObject") NmeCardValueObject nmeCardValueObject, Model model) throws Exception {
+		System.out.println("nmeCardValueObject.getnmeCardSeq()=" + nmeCardValueObject.getNmeCardSeq());
+		nmeCardService.updateNmeCard(nmeCardValueObject);
+		NmeCardValueObject selectNmeCardView = nmeCardService.selectNmeCardView(nmeCardValueObject);
+		model.addAttribute("selectNmeCardView", selectNmeCardView);
+		return "nmeCard/nmeCardSelectViewForm";
+	}
+	
+	@RequestMapping(value = "/deleteNmeCard.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String deleteNmeCard(@ModelAttribute("nmeCardValueObject") NmeCardValueObject nmeCardValueObject, ModelMap model) throws Exception {
+		System.out.println("NmeCardController의 deleteNmeCard.do 작동");
+		System.out.println("@@@@@@@@@@@@@@@@@"+nmeCardValueObject.getNmeCardSeq());
+		nmeCardService.deleteNmeCard(nmeCardValueObject.getNmeCardSeq());
+		return "redirect:/nmeCardSelectForm.do";
+	}
+}

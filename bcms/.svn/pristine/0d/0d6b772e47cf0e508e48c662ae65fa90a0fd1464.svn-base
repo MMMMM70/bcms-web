@@ -1,0 +1,14 @@
+var sendAjax =  function(url) {
+
+	var postString = "";
+	$.ajax({
+
+		type: "POST",
+		url: url,
+		data: postString,
+		success: function(msg) {
+			
+			document.getElementById("changeView1").innerHTML = msg;
+		}
+	});
+ };

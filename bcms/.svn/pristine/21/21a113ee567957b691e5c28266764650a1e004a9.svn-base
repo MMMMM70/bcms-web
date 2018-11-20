@@ -1,0 +1,44 @@
+package net.su.bcms.service;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import net.su.bcms.dataAccessObject.NmeCardDataAccessObject;
+import net.su.bcms.dataAccessObject.RecvNmeCardDataAccessObject;
+import net.su.bcms.dataAccessObject.SharNmeCardDataAccessObject;
+import net.su.bcms.valueObject.ComnctnNmeCardValueObject;
+import net.su.bcms.valueObject.ComnctnSearchAndPageValueObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+import net.su.logger.Logger;
+
+@Service
+public class SharNmeCardServiceImpl implements SharNmeCardService {
+	
+	@Resource
+	private SharNmeCardDataAccessObject sharNmeCardDataAccessObject;
+	
+	
+	//명함 리스트 조회
+	public List<NmeCardValueObject> selectSharNmeCardList(NmeCardValueObject nmeCardValueObject) throws Exception {
+		Logger.info(null);
+		int selectSharNmeCardCount = sharNmeCardDataAccessObject.selectSharNmeCardCount(nmeCardValueObject);
+		List<NmeCardValueObject> selectSharNmeCardList = sharNmeCardDataAccessObject.selectSharNmeCardList(nmeCardValueObject);
+		nmeCardValueObject.setTotalRecordCount(selectSharNmeCardCount);
+		return selectSharNmeCardList;
+	}
+	//명함 상세조회
+	public NmeCardValueObject selectSharNmeCardView(NmeCardValueObject nmeCardValueObject) throws Exception {
+		Logger.info(null);
+		NmeCardValueObject selectSharNmeCardView = sharNmeCardDataAccessObject.selectSharNmeCardView(nmeCardValueObject.getNmeCardSeq());
+		selectSharNmeCardView.setCurrentPageNo(nmeCardValueObject.getCurrentPageNo());
+		selectSharNmeCardView.setSearchCnd(nmeCardValueObject.getSearchCnd());
+		selectSharNmeCardView.setSearchAry(nmeCardValueObject.getSearchAry());
+		selectSharNmeCardView.setSearchWrd(nmeCardValueObject.getSearchWrd());
+		return selectSharNmeCardView;
+	}
+	
+}

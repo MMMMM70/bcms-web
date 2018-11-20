@@ -1,0 +1,40 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>자격증 추가</title>
+		<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+<body>
+	<div class="head">
+		<h3 class="page-header">✴ 자격증 추가</h3>
+	</div>
+	<div class="body">
+		<div class="wrapper">
+			<table class="table table-bordered" style="width:100%;">
+				<tr align="center">
+					<td>
+						자격증 번호
+					</td>
+					<td>
+						자격증명
+					</td>
+					<td>
+						자격증 종류
+					</td>
+				</tr>
+				<c:forEach var="selectLicnsList" items="${selectLicnsList}" varStatus="status">
+				<tr>
+					<td><c:out value="${selectLicnsList.licnsSeq}"/></td>
+					<td><c:out value="${selectLicnsList.licnsNme}"/></td>
+					<td><c:out value="${selectLicnsList.licnsType}"/></td>
+				</tr>
+				</c:forEach>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

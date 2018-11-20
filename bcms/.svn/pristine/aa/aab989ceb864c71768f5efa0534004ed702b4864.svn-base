@@ -1,0 +1,49 @@
+package net.su.bbs.valueObject;
+
+public class BbsValueObject extends SearchAndPageValueObject {
+	
+	private int bbsSeq;//게시글 고유값
+	private String bbsTitle = "";//게시글 제목
+	private String bbsWriter = "";//게시글 작성
+	private String bbsDate = "";//게시글 등록일
+	private String bbsContents = "";//게시글 내용
+	private String bbsUseAt = "";//게시글 사용 여부
+	
+	public int getBbsSeq() {
+		return bbsSeq;
+	}
+	public void setBbsSeq(int bbsSeq) {
+		this.bbsSeq = bbsSeq;
+	}
+	public String getBbsTitle() {
+		return bbsTitle;
+	}
+	public void setBbsTitle(String bbsTitle) {
+		this.bbsTitle = bbsTitle;
+	}
+	public String getBbsWriter() {
+		return bbsWriter;
+	}
+	public void setBbsWriter(String bbsWriter) {
+		this.bbsWriter = bbsWriter;
+	}
+	public String getBbsDate() {
+		return bbsDate;
+	}
+	public void setBbsDate(String bbsDate) {
+		this.bbsDate = bbsDate;
+	}
+	public String getBbsContents() {
+		return bbsContents;
+	}
+	public void setBbsContents(String bbsContents) {
+		this.bbsContents = bbsContents;
+	}
+	public String getBbsUseAt() {
+		return bbsUseAt;
+	}
+	public void setBbsUseAt(String bbsUseAt) {
+		this.bbsUseAt = bbsUseAt;
+	}
+	
+}

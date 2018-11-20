@@ -1,0 +1,59 @@
+package net.su.shar.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.su.shar.dataAccessObject.SharDataAccessObject;
+import net.su.shar.valueObject.SharValueObject;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class SharServiceImpl implements SharService {
+	
+	@Resource
+	   private SharDataAccessObject sharDataAccessObject;
+	   
+
+	   public List<SharValueObject> selectDumpList(int nmeCardSeq) throws Exception{
+	         List<SharValueObject> dumpMemList = sharDataAccessObject.selectDumpList(nmeCardSeq);
+	      return dumpMemList;   
+	   }
+
+	   public List<SharValueObject> selectNonsharList(int nmeCardSeq) throws Exception{
+	         List<SharValueObject> nonSharMemList = sharDataAccessObject.selectNonSharList(nmeCardSeq);
+	         return nonSharMemList;   
+	   }
+
+		public List<SharValueObject> selectMemList(int nmeCardSeq) throws Exception{
+			 List<SharValueObject> selectMemList  = sharDataAccessObject.selectMemList(nmeCardSeq);
+			return selectMemList;
+		}
+		public void plusingProcessor(ArrayList<String> plusCarrier, int nmeCardSeq) throws Exception{
+			for(int i = 0; i<plusCarrier.size(); i++){
+
+				SharValueObject VO = new SharValueObject();
+				VO.setMemSeq(Integer.parseInt(plusCarrier.get(i)));
+				VO.setNmeCardSeq(nmeCardSeq);
+				sharDataAccessObject.plusingProcessor(VO);
+			}
+		}
+		public void minusingProcessor(ArrayList<String> minusCarrier, int nmeCardSeq) throws Exception{
+			for(int i = 0; i<minusCarrier.size(); i++){
+
+				SharValueObject VO = new SharValueObject();
+				VO.setMemSeq(Integer.parseInt(minusCarrier.get(i)));
+				VO.setNmeCardSeq(nmeCardSeq);
+				sharDataAccessObject.minusingProcessor(VO);
+			}
+		}
+		public void dumpToShar(int nmeCardSeq) throws Exception{
+			sharDataAccessObject.dumpToShar(nmeCardSeq);
+		}
+		public void dumpCancel(int nmeCardSeq) throws Exception{
+			sharDataAccessObject.dumpCancel(nmeCardSeq);
+		}
+
+}

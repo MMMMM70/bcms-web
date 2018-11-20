@@ -1,0 +1,24 @@
+package net.su.base;
+
+import net.su.logger.Logger;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class BaseController {
+
+	@RequestMapping(value = "/title.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String header() throws Exception {
+		Logger.info(null);
+		return "base/title";
+	}
+	
+	@RequestMapping(value = "/newSpeed.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String newSpeed() throws Exception {
+		Logger.info(null);
+		return "base/newSpeed";
+	}
+	
+}

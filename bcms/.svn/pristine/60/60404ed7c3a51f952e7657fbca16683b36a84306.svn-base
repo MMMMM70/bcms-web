@@ -1,0 +1,18 @@
+package net.su.shar.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+import net.su.shar.valueObject.SharValueObject;
+
+public interface SharService {
+	
+	public List<SharValueObject> selectDumpList(int nmeCardSeq) throws Exception;
+	public List<SharValueObject> selectNonsharList(int nmeCardSeq) throws Exception;
+	public List<SharValueObject> selectMemList(int nmeCardSeq) throws Exception; 
+	public void plusingProcessor(ArrayList<String> plusCarrier, int nmeCardSeq) throws Exception;
+	public void minusingProcessor(ArrayList<String> minusCarrier, int nmeCardSeq) throws Exception;
+	public void dumpToShar(int nmeCardSeq) throws Exception;
+	public void dumpCancel(int nmeCardSeq) throws Exception;
+}

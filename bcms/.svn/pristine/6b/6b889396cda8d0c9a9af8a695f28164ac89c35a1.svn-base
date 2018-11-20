@@ -1,0 +1,114 @@
+package net.su.bbs.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import net.su.bbs.service.BbsService;
+import net.su.bbs.valueObject.BbsValueObject;
+import net.su.bbs.valueObject.SearchAndPageValueObject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+@Controller
+public class BbsController {
+	
+	@Resource
+	private BbsService bbsService;
+	
+	//임시 시작 .do
+	@RequestMapping(value = "/homsss.do", method = RequestMethod.GET)
+	public String home() {
+		return "home";
+	}
+	
+	@RequestMapping(value = "/bbsInsertForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String bbsInsertForm(@ModelAttribute("bbsValueObject") BbsValueObject bbsValueObject) throws Exception {
+		System.out.println("BbsController의 bbsInsertForm.do 작동");
+		return "bbs/bbsInsertForm";
+	}
+	
+	@RequestMapping(value = "/insertBbs.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String insertBbs(BbsValueObject bbsValueObject) throws Exception {
+		System.out.println("BbsController의 insertBbs.do 작동");
+		bbsService.insertBbs(bbsValueObject);
+		return "redirect:/bbsListForm.do";
+	}
+	
+	@RequestMapping(value = "/bbsListForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String bbsListForm(SearchAndPageValueObject searchAndPageValueObject, ModelMap model, HttpSession session) throws Exception {
+		System.out.println("BbsController의 bbsListForm.do 작동" + searchAndPageValueObject.getFirstRecordIndex());
+		List<BbsValueObject> selectBbsList = bbsService.selectBbsList(searchAndPageValueObject);
+		model.addAttribute("selectBbsList", selectBbsList);
+		return "bbs/bbsListForm";
+	}
+	
+	@RequestMapping(value = "/bbsViewForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String bbsViewForm(@ModelAttribute("bbsValueObject") BbsValueObject bbsValueObject, ModelMap model) throws Exception {
+		System.out.println("BbsController의 bbsViewForm.do 작동");
+		System.out.println("시작");
+		System.out.println(bbsValueObject.getCurrentPageNo());
+		System.out.println(bbsValueObject.getSearchCnd());
+		System.out.println(bbsValueObject.getSearchWrd());
+		System.out.println("끝");
+
+		
+		//BbsValueObject selectBbsView = bbsService.selectBbsView(bbsValueObject.getBbsSeq());
+		bbsValueObject = bbsService.selectBbsView(bbsValueObject);
+		System.out.println("시작2");
+		System.out.println(bbsValueObject.getCurrentPageNo());
+		System.out.println(bbsValueObject.getSearchCnd());
+		System.out.println(bbsValueObject.getSearchWrd());
+		System.out.println("끝2");
+		model.addAttribute("selectBbsView", bbsValueObject);
+		return "bbs/bbsViewForm";
+	}
+	
+	@RequestMapping(value = "/bbsUpdateForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String bbsUpdateForm(@ModelAttribute("bbsValueObject") BbsValueObject bbsValueObject, ModelMap model) throws Exception {
+		System.out.println("BbsController의 bbsUpdateForm.do 작동"+bbsValueObject.getBbsSeq());
+		BbsValueObject selectBbsView = bbsService.selectBbsView(bbsValueObject);
+		model.addAttribute("selectBbsView", selectBbsView);
+		return "bbs/bbsUpdateForm";
+	}
+	
+	@RequestMapping(value = "/updateBbs.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String updateBbs(@ModelAttribute("bbsValueObject") BbsValueObject bbsValueObject, Model model) throws Exception {
+//		System.out.println("BbsController의 updateBbs.do 작동");
+//		bbsService.updateBbs(bbsValueObject);
+//		ModelAndView mav = new ModelAndView();
+//
+//		RedirectView redirectView = new RedirectView(); // redirect url 설정
+//		redirectView.setUrl("redirect:/bbsViewForm.do");
+//		redirectView.setExposeModelAttributes(false);
+//
+//		mav.setView(redirectView);
+//		mav.addObject("bbsValueObject", bbsValueObject);
+//
+//		return mav;
+//		redirectAttributes.addFlashAttribute("bbsValueObject", bbsValueObject);
+//		BbsValueObject selectBbsView = bbsService.selectBbsView(bbsValueObject);
+//		model.addAttribute("selectBbsView", selectBbsView);
+//		return "redirect:/bbsViewForm.do";
+		System.out.println("bbsValueObject.getBbsSeq()=" + bbsValueObject.getBbsSeq());
+		bbsService.updateBbs(bbsValueObject);
+		BbsValueObject selectBbsView = bbsService.selectBbsView(bbsValueObject);
+		model.addAttribute("selectBbsView", selectBbsView);
+		return "bbs/bbsViewForm";
+	}
+	
+	@RequestMapping(value = "/deleteBbs.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String deleteBbs(@ModelAttribute("bbsValueObject") BbsValueObject bbsValueObject, ModelMap model) throws Exception {
+		System.out.println("BbsController의 deleteBbs.do 작동");
+		bbsService.deleteBbs(bbsValueObject.getBbsSeq());
+		return "redirect:/bbsListForm.do";
+	}
+}

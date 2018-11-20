@@ -1,0 +1,36 @@
+package net.su.bcms.dataAccessObject;
+
+import net.su.bcms.valueObject.GroupValueObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+
+import java.util.List; 
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
+public class GroupDataAccessObject  extends SqlSessionDaoSupport{
+	
+	public void groupInsert(GroupValueObject groupValueObject) throws Exception{	
+
+		getSqlSession().insert("groupMapper.groupInsert", groupValueObject);
+
+	}
+	public List<GroupValueObject> gropSelect(GroupValueObject groupValueObject) throws Exception
+	{
+	
+		List<GroupValueObject> groupList = getSqlSession().selectList("groupMapper.groplist", groupValueObject);
+
+		return groupList;
+	}
+	public List<GroupValueObject> groupWholeList(GroupValueObject groupValueObject) throws Exception
+	{
+	
+		List<GroupValueObject> groupWholeList = getSqlSession().selectList("groupMapper.groupWholeList", groupValueObject);
+		System.out.println(groupValueObject.getMemSearchWrd()+"DDDDDDDDDDDDDDDDDDDDDDDD값이 뜨는지 궁금합니다.");
+		System.out.println(groupValueObject.getMemSearchCnd()+"검색;;;;;;;;;값이 뜨는지 궁금합니다.");
+		System.out.println(groupValueObject.getMemSearchAry()+"정렬;;;;;;;;;값이 뜨는지 궁금합니다.");
+		return groupWholeList;
+	}
+}

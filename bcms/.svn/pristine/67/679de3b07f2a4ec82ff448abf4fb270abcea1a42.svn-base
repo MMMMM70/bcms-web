@@ -1,0 +1,111 @@
+package net.su.base.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import net.su.base.service.BaseService;
+import net.su.base.valueObject.BaseValueObject;
+import net.su.login.valueObject.MemValueObject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class BaseController {
+	
+	@Resource
+	private BaseService baseService;
+	
+	@RequestMapping(value = "/title.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String header() throws Exception {
+		System.out.println("BasicController의 title.do 작동");
+		return "base/title";
+	}
+	
+	
+	@RequestMapping(value = "/newSpeed.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String newSpeed(Model model,HttpSession session, BaseValueObject baseVo) throws Exception {
+		System.out.println("BasicController의 newSpeed.do 작동");
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		baseVo.setReceiveSeq(userLoginInfo.getMemSeq());
+		int receiveSeq = baseVo.getReceiveSeq();
+		Map<String, Object> map =  baseService.newspeedSelect(receiveSeq);
+//		List<BaseValueObject> newspeed =  baseService.newspeedSelect(receiveSeq);
+//		int newpeedSize = baseService.newpeedSize(receiveSeq);
+//		model.addAttribute("newspeed", newspeed.put("newspeed", newspeed));
+		model.addAttribute("newspeed", map.get("newspeed"));
+//		model.addAttribute("newpeedSize", newpeedSize);
+//		System.out.println("뉴스피드 컨트롤러 값 가지고 오나??"+newspeed);
+		return "base/newSpeed";
+	}
+	
+	
+//	@RequestMapping(value = "/newSpeed2.do", method={RequestMethod.GET, RequestMethod.POST})
+//	public @ResponseBody Map<String, Object> newSpeed2(Model model,HttpSession session, BaseValueObject baseVo) throws Exception {
+//		
+////		Map<String, Object> map = new HashMap<String, Object>();
+//		session.getAttribute("userLoginInfo");
+//		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+//		baseVo.setReceiveSeq(userLoginInfo.getMemSeq());
+//		
+//		int receiveSeq = baseVo.getReceiveSeq();
+//		
+//		Map<String,Object> map =  baseService.newspeedSelect(receiveSeq);
+//		Map<String,Object> returnMap = new HashMap<String, Object>(); 
+//		returnMap.put("newspeedData", map.get("newspeed"));
+//		map.put("dataList",list);
+	/*
+		System.out.println("BasicController의 newSpeed.do 작동");
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		baseVo.setReceiveSeq(userLoginInfo.getMemSeq());
+		int receiveSeq = baseVo.getReceiveSeq();
+		List<BaseValueObject> newspeed = baseService.newspeedSelect(receiveSeq);
+		int newpeedSize = baseService.newpeedSize(receiveSeq);
+		model.addAttribute("newspeed", newspeed);
+		model.addAttribute("newpeedSize", newpeedSize);
+		System.out.println("뉴스피드 컨트롤러 값 가지고 오나??"+newspeed);
+		return "base/newSpeed";
+	*/
+//		return returnMap;
+//	}
+	@RequestMapping(value = "/newSpeed2.do", method={RequestMethod.GET, RequestMethod.POST})
+	public @ResponseBody Map<String, Object> newSpeed2(Model model,HttpSession session, BaseValueObject baseVo) throws Exception {
+		
+//		Map<String, Object> map = new HashMap<String, Object>();
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		baseVo.setReceiveSeq(userLoginInfo.getMemSeq());
+		
+		int receiveSeq = baseVo.getReceiveSeq();
+		
+		Map<String, Object> map =  baseService.newspeedSelect(receiveSeq);
+//		model.addAttribute("newList",newList);
+		Map<String, Object> returnList = new HashMap<String, Object>();
+		returnList.put("newList", map.get("newspeed"));
+		
+	/*
+		System.out.println("BasicController의 newSpeed.do 작동");
+		session.getAttribute("userLoginInfo");
+		MemValueObject userLoginInfo = (MemValueObject)session.getAttribute("userLoginInfo");
+		baseVo.setReceiveSeq(userLoginInfo.getMemSeq());
+		int receiveSeq = baseVo.getReceiveSeq();
+		List<BaseValueObject> newspeed = baseService.newspeedSelect(receiveSeq);
+		int newpeedSize = baseService.newpeedSize(receiveSeq);
+		model.addAttribute("newspeed", newspeed);
+		model.addAttribute("newpeedSize", newpeedSize);
+		System.out.println("뉴스피드 컨트롤러 값 가지고 오나??"+newspeed);
+		return "base/newSpeed";
+	*/
+		return returnList;
+	}
+}

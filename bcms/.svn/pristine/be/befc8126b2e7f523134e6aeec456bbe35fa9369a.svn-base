@@ -1,0 +1,22 @@
+package net.su.bcms.service;
+
+import java.util.List;
+
+import net.su.bcms.dataAccessObject.RecvNmeCardDataAccessObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+
+public class RecvNmeCardServiceimpl implements RecvNmeCardService {
+	
+	private RecvNmeCardDataAccessObject recvNmeCardDataAccessObject;
+	
+	//받은 명함 리스트
+	public List<NmeCardValueObject> selectRecvNmeCardList(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("NmeCardServiceimpl의 selectRecvNmeCardList()작동");
+		int selectRecvNmeCardCount = recvNmeCardDataAccessObject.selectRecvNmeCardCount(searchAndPageValueObject);
+		List<NmeCardValueObject> selectRecvNmeCardList = recvNmeCardDataAccessObject.selectRecvNmeCardList(searchAndPageValueObject);
+		searchAndPageValueObject.setTotalRecordCount(selectRecvNmeCardCount);
+		return selectRecvNmeCardList;
+	}
+
+}

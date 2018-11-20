@@ -1,0 +1,128 @@
+package net.su.login.valueObject;
+
+public class MemValueObject {
+	
+	private int memSeq;//회원고유값
+	private String memId;//회원ID
+	private String memPw;//회원PW
+	private String memNme;//회원 이름
+	private String memDepmtNme; //부서명
+	private int memDepmtSeq; //부서 고유값
+	private String memPostn;//직급
+	private String memSex; //성별
+	private String memBirth; //생년월일
+	private String memMobil1; //전화번호 첫번쨰
+	private String memMobil2; //전화번호 첫번쨰
+	private String memMobil3; //전화번호 첫번쨰
+	private String memJoinDate; //가입날짜
+	private String memEmail1; //이메일 앞자리
+	private String memEmail2; //이메일 뒷자리
+	private String memCompnNme;//회사명
+	private int memCompnSeq;//회사 고유값
+	
+	
+	
+	public String getMemDepmtNme() {
+		return memDepmtNme;
+	}
+	public void setMemDepmtNme(String memDepmtNme) {
+		this.memDepmtNme = memDepmtNme;
+	}
+	public int getMemDepmtSeq() {
+		return memDepmtSeq;
+	}
+	public void setMemDepmtSeq(int memDepmtSeq) {
+		this.memDepmtSeq = memDepmtSeq;
+	}
+	public int getMemCompnSeq() {
+		return memCompnSeq;
+	}
+	public void setMemCompnSeq(int memCompnSeq) {
+		this.memCompnSeq = memCompnSeq;
+	}
+	public String getMemCompnNme() {
+		return memCompnNme;
+	}
+	public void setMemCompnNme(String memCompnNme) {
+		this.memCompnNme = memCompnNme;
+	}
+	public String getMemEmail1() {
+		return memEmail1;
+	}
+	public void setMemEmail1(String memEmail1) {
+		this.memEmail1 = memEmail1;
+	}
+	public String getMemEmail2() {
+		return memEmail2;
+	}
+	public void setMemEmail2(String memEmail2) {
+		this.memEmail2 = memEmail2;
+	}
+	public int getMemSeq() {
+		return memSeq;
+	}
+	public void setMemSeq(int memSeq) {
+		this.memSeq = memSeq;
+	}
+	public String getMemId() {
+		return memId;
+	}
+	public void setMemId(String memId) {
+		this.memId = memId;
+	}
+	public String getMemPw() {
+		return memPw;
+	}
+	public void setMemPw(String memPw) {
+		this.memPw = memPw;
+	}
+	public String getMemNme() {
+		return memNme;
+	}
+	public void setMemNme(String memNme) {
+		this.memNme = memNme;
+	}
+	public String getMemPostn() {
+		return memPostn;
+	}
+	public void setMemPostn(String memPostn) {
+		this.memPostn = memPostn;
+	}
+	public String getMemSex() {
+		return memSex;
+	}
+	public void setMemSex(String memSex) {
+		this.memSex = memSex;
+	}
+	public String getMemBirth() {
+		return memBirth;
+	}
+	public void setMemBirth(String memBirth) {
+		this.memBirth = memBirth;
+	}
+	public String getMemJoinDate() {
+		return memJoinDate;
+	}
+	public void setMemJoinDate(String memJoinDate) {
+		this.memJoinDate = memJoinDate;
+	}
+	public String getMemMobil1() {
+		return memMobil1;
+	}
+	public void setMemMobil1(String memMobil1) {
+		this.memMobil1 = memMobil1;
+	}
+	public String getMemMobil2() {
+		return memMobil2;
+	}
+	public void setMemMobil2(String memMobil2) {
+		this.memMobil2 = memMobil2;
+	}
+	public String getMemMobil3() {
+		return memMobil3;
+	}
+	public void setMemMobil3(String memMobil3) {
+		this.memMobil3 = memMobil3;
+	}
+	
+}

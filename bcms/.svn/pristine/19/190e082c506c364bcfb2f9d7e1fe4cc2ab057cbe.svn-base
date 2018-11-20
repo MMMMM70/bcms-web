@@ -1,0 +1,51 @@
+package net.su.bbs.dataAccessObject;
+
+import java.util.List;
+
+import net.su.bbs.valueObject.BbsValueObject;
+import net.su.bbs.valueObject.SearchAndPageValueObject;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class BbsDataAccessObject extends SqlSessionDaoSupport {
+	
+	public void insertBbs(BbsValueObject bbsValueObject) throws Exception {
+		System.out.println("BbsDataAccessObject의 insertBbs()작동");
+		getSqlSession().insert("bbsMapper.insertBbs", bbsValueObject);
+	}
+
+	public List<BbsValueObject> selectBbsList(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("BbsDataAccessObject의 selectBbsList()작동");
+		List<BbsValueObject> selectBbsList = getSqlSession().selectList("bbsMapper.selectBbsList", searchAndPageValueObject);
+		return selectBbsList;
+	}
+	
+	public int selectBbsCount(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("BbsDataAccessObject의 selectBbsCount()작동");
+		int selectBbsCount = getSqlSession().selectOne("bbsMapper.selectBbsCount", searchAndPageValueObject);
+		return selectBbsCount;
+	}
+	
+	public BbsValueObject selectBbsView(int bbsSeq) throws Exception {
+		System.out.println("BbsDataAccessObject의 selectBbsView()작동");
+		BbsValueObject selectBbsView = getSqlSession().selectOne("bbsMapper.selectBbsView", bbsSeq);
+		return selectBbsView;
+	}
+	
+	public void updateBbs(BbsValueObject bbsValueObject) throws Exception {
+		System.out.println("BbsDataAccessObject의 updateBbs()작동");
+		getSqlSession().update("bbsMapper.updateBbs", bbsValueObject);
+	}
+	
+	public void deleteBbs(int bbsSeq) throws Exception {
+		System.out.println("BbsDataAccessObject의 deleteBbs()작동");
+		getSqlSession().update("bbsMapper.deleteBbs", bbsSeq);
+	}
+	
+	public void real_deleteBbs(int bbsSeq) throws Exception {
+		System.out.println("BbsDataAccessObject의 real_deleteBbs()작동");
+		getSqlSession().delete("bbsMapper.realDeleteBbs", bbsSeq);
+	}
+}

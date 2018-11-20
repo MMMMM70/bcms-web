@@ -1,0 +1,118 @@
+package net.su.shar.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.su.shar.dataAccessObject.SharDataAccessObject;
+import net.su.shar.valueObject.SharValueObject;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class SharServiceImpl implements SharService {
+	
+	@Resource
+	   private SharDataAccessObject sharDataAccessObject;
+	   
+
+	   public List<SharValueObject> selectDumpList(SharValueObject SharVo) throws Exception{
+	         List<SharValueObject> dumpMemList = sharDataAccessObject.selectDumpList(SharVo);
+	      return dumpMemList;   
+	   }
+
+	   public List<SharValueObject> selectNonSharList(SharValueObject SharVo) throws Exception{
+	         List<SharValueObject> nonSharMemList = sharDataAccessObject.selectNonSharList(SharVo);
+	         return nonSharMemList;   
+	   }
+
+		public List<SharValueObject> selectMemList(SharValueObject SharVo) throws Exception{
+			 List<SharValueObject> selectMemList  = sharDataAccessObject.selectMemList(SharVo);
+			return selectMemList;
+		}
+		public List<SharValueObject> selectSharList(SharValueObject SharVo) throws Exception{
+	         List<SharValueObject> sharMemList = sharDataAccessObject.selectSharList(SharVo);
+	         return sharMemList;   
+		}
+		public void plusingProcessor(ArrayList<String> plusCarrier, SharValueObject SharVo) throws Exception{
+			for(int i = 0; i<plusCarrier.size(); i++){
+
+				SharValueObject VO = new SharValueObject();
+				VO.setMemSeq(Integer.parseInt(plusCarrier.get(i)));
+				VO.setNmeCardSeq(SharVo.getNmeCardSeq());
+				sharDataAccessObject.plusingProcessor(VO);
+			}
+		}
+		public void minusingProcessor(ArrayList<String> minusCarrier, SharValueObject SharVo) throws Exception{
+			for(int i = 0; i<minusCarrier.size(); i++){
+
+				SharValueObject VO = new SharValueObject();
+				VO.setMemSeq(Integer.parseInt(minusCarrier.get(i)));
+				VO.setNmeCardSeq(SharVo.getNmeCardSeq());
+				sharDataAccessObject.minusingProcessor(VO);
+			}
+		}
+		public void dumpToShar(SharValueObject SharVo) throws Exception{
+			sharDataAccessObject.dumpToShar(SharVo);
+		}
+		public void dumpCancel(SharValueObject SharVo) throws Exception{
+			sharDataAccessObject.dumpCancel(SharVo);
+		}
+		public void remvSharRecv(ArrayList<String> relsCarrier,SharValueObject SharVo) throws Exception{
+			for(int i = 0; i<relsCarrier.size(); i++){
+
+				SharValueObject VO = new SharValueObject();
+				VO.setMemSeq(Integer.parseInt(relsCarrier.get(i)));
+				VO.setNmeCardSeq(SharVo.getNmeCardSeq());
+				VO.setSendMemSeq(SharVo.getSendMemSeq());
+				sharDataAccessObject.remvSharRecv(VO);
+			}
+		}
+		public  List<SharValueObject> allMemList(int where) throws Exception{
+			List<SharValueObject> allMemList = sharDataAccessObject.allMemList(where);
+			
+			return allMemList;
+		}
+		public  List<SharValueObject> sendMemList(List<Integer> senderInfo, SharValueObject SharVo) throws Exception{
+			List<SharValueObject> sendMemList = sharDataAccessObject.sendMemList(senderInfo, SharVo);
+			return sendMemList;
+		}
+		public  List<SharValueObject> noneSendMemList(List<Integer> senderInfo, SharValueObject SharVo) throws Exception{
+			List<SharValueObject> noneSendMemList = sharDataAccessObject.noneSendMemList(senderInfo, SharVo);
+
+			return noneSendMemList;
+		}
+		public void addSendRecv(List<Integer> senderInfo, List<String>plusProcessing  ) throws Exception{
+			ArrayList<String> plusCarrier = new ArrayList<String>();
+			for(int y=0; y<senderInfo.size();y++){
+				SharValueObject VO = new SharValueObject();
+				VO.setNmeCardSeq(senderInfo.get(y));
+				for(int i=0; i<plusProcessing.size(); i++){
+					plusCarrier.add(plusProcessing.get(i));
+					VO.setMemSeq(Integer.parseInt(plusCarrier.get(i)));
+					sharDataAccessObject.addSendRecv(VO);	
+				}
+			}
+		}
+		public void remvSendRecv(List<Integer> senderInfo, List<String>minusProcessing ) throws Exception{
+			ArrayList<String> minusCarrier = new ArrayList<String>();
+			for(int y=0; y<senderInfo.size();y++){
+				SharValueObject VO = new SharValueObject();
+				VO.setNmeCardSeq(senderInfo.get(y));
+				for(int i=0; i<minusProcessing.size(); i++){
+					minusCarrier.add(minusProcessing.get(i));
+					VO.setMemSeq(Integer.parseInt(minusCarrier.get(i)));
+					sharDataAccessObject.remvSendRecv(VO);	
+				}
+			}
+		}
+		public void InsertSend(List<Integer> senderInfo, SharValueObject SharVo) throws Exception{
+		    System.out.println(SharVo.getSendMemSeq()+"#센드멤#############서비스");
+			sharDataAccessObject.InsertSend(senderInfo, SharVo);			
+		}
+		public void cancelSend(List<Integer> senderInfo) throws Exception{
+			sharDataAccessObject.cancelSend(senderInfo);
+		}
+
+}

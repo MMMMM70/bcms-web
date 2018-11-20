@@ -1,0 +1,27 @@
+package net.su.bcms.controller;
+
+import java.util.Locale ;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Controller
+public class GroupController {
+	private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
+	
+	   @RequestMapping(value = "/groupListForm.do", method={RequestMethod.GET, RequestMethod.POST})
+	   public String groupListForm()throws Exception {
+
+	      return "group/groupListForm";
+	   }
+	   @RequestMapping(value = "/groupAddition.do", method={RequestMethod.GET, RequestMethod.POST})
+	   public String groupAddition(Locale locale)throws Exception {
+		   logger.info("groupAddition", locale);
+		   
+	      return "group/groupAdditionForm";
+	   }
+
+}

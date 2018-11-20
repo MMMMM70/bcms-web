@@ -1,0 +1,52 @@
+package net.su.bcms.service;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.su.bcms.dataAccessObject.NmeCardDataAccessObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.bcms.valueObject.SearchAndPageValueObject;
+
+import org.springframework.stereotype.Service;
+
+@Service
+
+public class NmeCardServiceimpl implements NmeCardService {
+
+	@Resource
+	private NmeCardDataAccessObject nmeCardDataAccessObject;
+	
+	public void insertNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception {
+		System.out.println("BbsServiceimpl의 insertBbs()작동");
+		nmeCardDataAccessObject.insertNmeCard(nmeCardValueObject);
+	}
+	
+	public List<NmeCardValueObject> selectNmeCardList(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("NmeCardServiceimpl의 selectNmeCardList()작동");
+		int selectNmeCardCount = nmeCardDataAccessObject.selectNmeCardCount(searchAndPageValueObject);
+		List<NmeCardValueObject> selectNmeCardList = nmeCardDataAccessObject.selectNmeCardList(searchAndPageValueObject);
+		searchAndPageValueObject.setTotalRecordCount(selectNmeCardCount);
+		return selectNmeCardList;
+	}
+	
+	public NmeCardValueObject selectNmeCardView(NmeCardValueObject nmeCardValueObject) throws Exception {
+		System.out.println("BbsServiceimpl의 selectBbsView()작동");
+		NmeCardValueObject selectNmeCardView = nmeCardDataAccessObject.selectNmeCardView(nmeCardValueObject.getNmeCardSeq());
+		selectNmeCardView.setCurrentPageNo(nmeCardValueObject.getCurrentPageNo());
+		selectNmeCardView.setSearchCnd(nmeCardValueObject.getSearchCnd());
+		selectNmeCardView.setSearchWrd(nmeCardValueObject.getSearchWrd());
+		return selectNmeCardView;
+	}
+	
+	public void updateNmeCard(NmeCardValueObject nmeCardValueObject) throws Exception {
+		System.out.println("BbsServiceimpl의 updateBbs()작동");
+		nmeCardDataAccessObject.updateNmeCard(nmeCardValueObject);
+	}
+	
+	public void deleteNmeCard(int nmeCardSeq) throws Exception {
+		System.out.println("BbsServiceimpl의 deleteBbs()작동");
+		nmeCardDataAccessObject.deleteNmeCard(nmeCardSeq);//bbs_use_at을 N으로 변경
+		//bbsDataAccessObject.realDeleteBbs(bbsSeq);//게시글 완전 삭제
+	}
+}

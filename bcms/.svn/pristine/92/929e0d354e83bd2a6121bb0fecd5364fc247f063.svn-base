@@ -1,0 +1,194 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			document.title = 'BCMS - ${selectNmeCardView.nmeCardLastNme}${selectNmeCardView.nmeCardFirstNme} 님의 명함';
+		</script>
+		<script type="text/javascript">
+			function nmeCardUpdateForm() { //명함 수정 완료
+				document.nmeCardView.action = "/nmeCardUpdateForm.do";
+				document.nmeCardView.submit();
+			}
+			function nmeCardComnctnSelectForm(nmeCardSeq) {
+				//nmeCardComnctnSelectForm 으로 nmeCardSeq 를 보낸다.
+				document.nmeCardInfo.nmeCardSeq.value = nmeCardSeq;
+				document.nmeCardInfo.action = "/nmeCardComnctnSelectForm.do";
+				document.nmeCardInfo.submit();
+			}
+			function nmeCardHistrSelectForm() {
+				//nmeCardComnctnSelectForm 으로 nmeCardSeq 를 보낸다.
+				document.nmeCardView.action = "/nmeCardHistrSelectForm.do";
+				document.nmeCardView.submit();
+			}
+			function nmeCardButtonForm(nmeCardSeq) {
+				//nmeCardButtonForm 으로 nmeCardSeq 를 보낸다.
+				document.nmeCardInfo.nmeCardSeq.value = nmeCardSeq;
+				document.nmeCardInfo.action = "/nmeCardButtonForm.do";
+				document.nmeCardInfo.submit();
+			}
+			function sharForm(){
+			    var popUrl = "/sharForm.do";	//팝업창에 출력될 페이지 URL
+				var popOption = "width=1594, height=910, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+					window.open(popUrl,"",popOption);
+			 }
+		</script>
+	</head>
+	<body onload="nmeCardButtonForm">
+	<c:choose>
+		<c:when test="${selectNmeCardView.nmeCardUseAt == 'Y'}">
+			<c:import url="/nmeCardSelectForm.do"/>
+		</c:when>
+		<c:otherwise>
+			<c:import url="/nmeCardBinSelectForm.do"/>
+		</c:otherwise>
+	</c:choose>
+		<div class="body">
+			<form name="nmeCardView" method="post">
+				<input type="hidden" name="nmeCardSeq" value="${selectNmeCardView.nmeCardSeq}">
+				<input type="hidden" name="currentPageNo" value="${selectNmeCardView.currentPageNo}"> <!-- 현재 페이지값 -->
+				<input type="hidden" name="searchCnd" value="${selectNmeCardView.searchCnd}"> <!-- 검색조건 -->
+				<input type="hidden" name="searchWrd" value="${selectNmeCardView.searchWrd}"> <!-- 검색단어 -->
+			</form>
+			<c:choose>
+				<c:when test="${selectNmeCardView.nmeCardUseAt == 'Y'}">
+					<div class="wrapper" style="width:600px; float:left; margin-left:250px;">
+				</c:when>
+				<c:otherwise>
+					<div class="wrapper" style="width:600px;">
+				</c:otherwise>	
+			</c:choose>		
+				<div class="card" style="width:500px">
+					<h3 class="page-header" style="border-bottom:0px">✴ 명함정보
+					<c:if test="${selectNmeCardView.nmeCardUseAt == 'Y'}">
+						<a href="javascript:sharForm()"><img style="margin-bottom: 6px;" alt="공유하기" src="resources/img/share2.png" width="30px" height="30px"></a>
+						<input class="btn btn-default" type="button" value="수정" style="float:right" onclick="javascript:nmeCardUpdateForm()">
+						<input class="btn btn-default" type="button" value="변경내역" style="float:right" onclick="javascript:nmeCardHistrSelectForm()">
+					</c:if>
+					</h3>
+					<article>
+						<div class="col-lg-12">
+							<table class="table" style="width:100%;">
+									<colgroup>
+										<col width="10%">
+										<col width="90%">
+									</colgroup>	
+									<!-- 이름 입력란 -->
+									<tr>
+										<td class="text-left">
+											<p>
+												<img alt="이름" src="resources/img/name.png" width="20px" height="20px" style="vertical-align:top">
+												<strong><font size=4  style="vertical-align:middle"> 성명</font></strong>
+											</p>									
+											<p style="margin-left: 24px;"><strong>이름 </strong><font> ${selectNmeCardView.nmeCardLastNme}${selectNmeCardView.nmeCardFirstNme}</font></p>
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+												<strong style="margin-left: 24px;">성별 </strong><font> ${selectNmeCardView.nmeCardSex}</font>
+											</div>									
+										</td>
+									</tr>
+									<!-- 회사 입력란 -->
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>
+												<img alt="회사" src="resources/img/company.png" width="20px" height="20px" style="vertical-align:top">
+												<strong><font size=4  style="vertical-align:middle"> 회사</font></strong>
+											</p>
+											<p style="margin-left: 24px;">
+												<strong>회사명  </strong><font> ${selectNmeCardView.compnNme}</font>
+												<strong>부서 </strong><font> ${selectNmeCardView.depmtNme}</font>
+											</p>
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+												<strong style="margin-left: 24px;">직급 </strong><font> ${selectNmeCardView.postnNme}</font>
+												<strong>직무 </strong><font> ${selectNmeCardView.jobNme}</font>
+											</div>	
+										</td>								
+									</tr>
+									<!-- 주소 입력란 -->
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>
+												<img alt="주소" src="resources/img/juso.png" width="20px" height="20px" style="vertical-align:top">
+												<strong><font size=4  style="vertical-align:middle"> 주소</font></strong>
+											</p>
+											<p style="margin-left: 24px;"><strong>우편번호 </strong><font> ${selectNmeCardView.nmeCardPostNum}</font></p>
+											<p style="margin-left: 24px;"><strong>기본주소 </strong><font> ${selectNmeCardView.nmeCardBascAdrs}</font></p>
+											<p style="margin-left: 24px;"><strong>상세주소</strong><font> ${selectNmeCardView.nmeCardDetlAdrs}</font></p>
+										</td>
+									</tr>
+									<!-- 연락처 입력란 -->
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>
+												<img alt="연락처" src="resources/img/tel.png" width="20px" height="20px">
+												<strong><font size=4  style="vertical-align:middle"> 연락처 </font></strong>
+											</p>
+											<p style="margin-left: 24px;"><strong>휴대폰 </strong><font> ${selectNmeCardView.nmeCardMobil}</font></p>
+											<p style="margin-left: 24px;"><strong>전화 </strong><font> ${selectNmeCardView.nmeCardTel}</font></p>	
+											<p style="margin-left: 24px;"><strong>팩스 </strong><font> ${selectNmeCardView.nmeCardFax}</font></p>
+										</td>
+									</tr>
+									<!-- 네트워크 입력란 -->
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>
+												<img alt="네트워크" src="resources/img/network.png" width="20px" height="20px" style="vertical-align:top">
+												<strong><font size=4  style="vertical-align:middle"> 네트워크</font></strong>
+											</p>
+											<p style="margin-left: 24px;"><strong>이메일 </strong><font> ${selectNmeCardView.nmeCardEmail}</font></p>
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+												<p style="margin-left: 24px;"><strong>SNS </strong><font> ${selectNmeCardView.nmeCardSns}</font></p>
+												<p style="margin-left: 24px;"><strong>홈페이지 </strong><font> ${selectNmeCardView.nmeCardHompg}</font></p>
+												<p style="margin-left: 24px;"><strong>메신저 </strong><font> ${selectNmeCardView.nmeCardMesngr}</font></p>
+											</div>												
+										</td>
+									</tr>
+									<!-- 기타 입력란 -->
+									<tr>
+										<td class="text-left" style="width:100%">
+											<p>
+												<img alt="기타" src="resources/img/etc.png" width="20px" height="20px" style="vertical-align:top">
+												<strong><font size=4  style="vertical-align:middle"> 기타</font></strong>
+											</p>											
+											<a style="float:right" href=#none onclick="this.nextSibling.style.display=(this.nextSibling.style.display=='none')?'block':'none';">
+											▼
+											</a><div style='display:none'> <!-- div 줄 바꿈하면 펼치기/접기 기능 안먹힘 -->
+											<p>												
+												<strong style="margin-left: 24px;">취미 </strong><font> ${selectNmeCardView.nmeCardHob}</font>
+											</p>
+											<p>
+												<strong style="margin-left: 24px;">관심사 </strong><font> ${selectNmeCardView.nmeCardInterst}</font>
+											</p>
+											<p>
+												<strong style="margin-left: 24px;">자격증 </strong><font> ${selectNmeCardView.nmeCardLicns}</font>
+											</p>
+											</div>	
+										</td>
+									</tr>
+								</table>
+						</div>
+					</article>
+				</div>
+			</div>
+		</div>
+		<c:choose>
+			<c:when test="${selectNmeCardView.nmeCardUseAt == 'Y'}">
+				<div>
+					<c:import url="/nmeCardButtonForm.do"/>
+				</div>
+			</c:when>
+			<c:otherwise>
+				
+			</c:otherwise>
+		</c:choose>
+	</body>
+</html>

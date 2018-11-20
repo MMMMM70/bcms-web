@@ -1,0 +1,21 @@
+package net.su.bcms.service;
+
+import java.util.List; 
+import net.su.bcms.valueObject.GroupValueObject;
+
+public interface GroupService {
+	
+	public void groupInsert(GroupValueObject groupValueObject) throws Exception;
+	
+	public List<GroupValueObject> gropSelect(GroupValueObject groupValueObject) throws Exception;
+	
+	public List<GroupValueObject> groupWholeList(GroupValueObject groupValueObject) throws Exception;
+	
+	public void groupMemInsert(List<Integer> memInfo, List<Integer> groupList) throws Exception;
+	
+	public void groupMemDelete(List<Integer> memInfo) throws Exception;
+	
+	public void groupDelete(GroupValueObject groupValueObject) throws Exception;
+
+	public void gropUpdateCommit(GroupValueObject groupValueObject) throws Exception;
+}

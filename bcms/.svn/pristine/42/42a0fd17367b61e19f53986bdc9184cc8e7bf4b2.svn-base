@@ -1,0 +1,256 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="/resources/dist/css/jquery-ui.css">
+	<link rel="stylesheet" href="/resources/dist/css/ui.css" type="text/css">
+	<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/resources/dist/js/jquery-1.10.2.js"></script>
+	<script src="/resources/dist/js/jquery-ui.js"></script>
+	
+	<script>
+		var list = new Array();  // 어레이 형태의 var 선언
+		<c:forEach items="${memCompnList}" var="item">// 반복문
+			list.push({value: "${item.memCompnNme}"}); // bear 리스트의  name 열을 푸시를  통해서 리스트에 넣음
+		</c:forEach>
+	</script>
+	<script>
+		$(function() {
+			$( "#memCompnNme" ).autocomplete({
+				source: list
+			});
+		});
+	</script>
+	
+	<script>
+		
+		function insertEmail(){
+	        if (frm.email.value == '0') {
+	            frm.nmeCardEmail2.readonly = false;
+	            frm.nmeCardEmail2.value = '';
+	            frm.nmeCardEmail2.focus();
+	        }
+	        else {
+	            frm.nmeCardEmail2.readonly = true;
+	            frm.nmeCardEmail2.value = frm.email.value;
+	        }
+	    }
+		function compnInsertPopup() {
+			var popUrl = "compnInsertPopup.do";
+			var popupName= "compnInsertPopup";
+			var width = 400;
+			var height = 150;
+			var leftPosition = (screen.width/2) - (width/2);
+				leftPosition += window.screenLeft;//듀얼 모니터일때
+			var topPosition = (screen.height/2) - (height/2);
+			
+			var win = window.open(popUrl, popupName, "left="+leftPosition+", top="+topPosition+", toolbar=no, location=no, directories=no, scrollbars=no, resizable=no, width="+width+", height="+height);
+			
+			document.frm.target = popupName;
+			document.frm.action = "/compnInsertPopup.do";
+			document.frm.submit();
+			
+			if(win == null) {//만약 팝업 차단으로 팝업창이 나타나지 않을 경우
+				alert("팝업차단을 해제해주세요!");
+			}
+			else {
+			win.focus();    
+			}
+		}
+		function depmtInsertPopup() {
+			var popUrl = "depmtInsertPopup.do";
+			var popupName= "depmtInsertPopup";
+			var width = 400;
+			var height = 150;
+			var leftPosition = (screen.width/2) - (width/2);
+				leftPosition += window.screenLeft;//듀얼 모니터일때
+			var topPosition = (screen.height/2) - (height/2);
+			
+			var win = window.open(popUrl, popupName, "left="+leftPosition+", top="+topPosition+", toolbar=no, location=no, directories=no, scrollbars=no, resizable=no, width="+width+", height="+height);
+			
+			document.frm.target = popupName;
+			document.frm.action = "/depmtInsertPopup.do";
+			document.frm.submit();
+			
+			if(win == null) {//만약 팝업 차단으로 팝업창이 나타나지 않을 경우
+				alert("팝업차단을 해제해주세요!");
+			}
+			else {
+			win.focus();    
+			}
+		}
+		function insertMembership(){
+			document.frm.action = "/insertMembership.do";
+			document.frm.submit();
+		}
+	</script>
+	
+	</head>
+	<body>
+		<form method="post" name="frm">
+			<div align="center" style="margin-top:15px;">
+			   <a href="javascript:nmeCardLogo()"><img src="resources/img/BCMS.png"  id="logo"></a>
+			</div>
+			<div class="navbar-wrapper">
+				<nav class="navbar navbar-inverse navbar-static-top">
+					<div class="container">
+						<div class="navbar-header">
+						</div>
+						<div id="navbar" class="navbar-collapse">
+						</div>
+					</div>
+				</nav>
+			</div>
+			<div class="body">
+				<div class ="wrapper">
+					<div class="card" style="width:1255px">
+						<article class="card-l1ist">
+							<div class="col-lg-12">
+								<center><h2 class="page-header" style="width:550px">JOIN</h2></center>
+							</div>
+							<table style="width:800px; margin-right:200px" align="center">
+								<colgroup>
+									<col width="150px">
+									<col width="650px">
+								</colgroup>
+								<tr>
+									<td>
+										아이디 
+									</td>
+									<td>
+										<input class="form-control" placeholder="아이디" name="memId" type="text" maxlength="12" style="width:300px" required> <button class="btn btn-default" type="button">중복확인</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										비밀번호
+									</td>
+									<td>
+										<input class="form-control" placeholder="비밀번호" name="memPw" type="password" maxlength="12" style="width:300px" required>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										비밀번호 확인
+									</td>
+									<td>
+										<input class="form-control" placeholder="비밀번호 확인" name="memPwRe" type="password" maxlength="12" style="width:300px" required>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										성명
+									</td>
+									<td>
+										<input class="form-control" placeholder="성명" name="memNme" type="text" maxlength="12" style="width:300px" required>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										회사
+									</td>
+									<td>
+										<input class="form-control" placeholder="회사" id="memCompnNme" name="memCompnSeq" type="text" maxlength="12" style="width:300px; text-align:left"> 
+										<button class="btn btn-default" type="button" onclick="javascript:compnInsertPopup();">회사등록</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										부서
+									</td>
+									<td>
+										<input class="form-control" placeholder="부서" name="memDepamtSeq" type="text" maxlength="12" style="width:300px; text-align:left">
+										<button class="btn btn-default" type="button" onclick="javascript:depmtInsertPopup();">부서등록</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										직급
+									</td>
+									<td>
+										<input class="form-control" placeholder="직급" name="memPostn" type="text" maxlength="12" style="width:300px; text-align:left">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										성별
+									</td>
+									<td>
+										<select name="memSex" class="form-control" style="width:80px; text-align:left">
+										    <option value="남자">남자</option>
+										    <option value="여자">여자</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										생년월일
+									</td>
+									<td style="vertical-align:middle">
+										<input type="date" name="memBirth" class="form-control" placeholder="생년월일" maxlength="12" style="width:160px; text-align:left">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										이메일
+									</td>
+									<td nowrap="nowrap">
+										<input type="text" class="form-control" style="width:200px; text-align:left"  id="memEmail" name="memEmail">
+										@
+										<input type="text" class="form-control" style="width:200px; text-align:left" id="memEmail2" name="memEmail2">
+										<select id="email" class="form-control" style="width:200px; text-align:left" onChange="javascript:insertEmail();">
+											<option value="0" selected>직접입력</option>					
+											<option value="naver.com">naver.com</option>
+											<option value="daum.net">daum.net</option>             
+											<option value="nate.com">nate.com</option>
+											<option value="hanmail.net">hanmail.net</option>
+											<option value="gamil.com">gmail.com</option>
+											<option value="hotmail.com">hotmail.com</option>
+											<option value="lycos.co.kr">lycos.co.kr</option>
+											<option value="empal.com">empal.com</option>
+											<option value="dreamwiz.com">dreamwiz.com</option>
+											<option value="korea.com">korea.com</option>       				
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										휴대폰
+									</td>
+									<td>
+										<select id="memMobil1" name="memMobil1" class="form-control" style="width:120px; text-align:left">
+											<option value="선택" selected>직접입력</option>					
+											<option value="010">010</option>
+											<option value="011">011</option>
+											<option value="016">016</option>
+											<option value="018">018</option>
+											<option value="019">019</option>
+										</select>
+										-<input type="text" class="form-control" style="width:100px; text-align:left" id="memMobil2" name="memMobil2">
+										-<input type="text" class="form-control" style="width:100px; text-align:left" id="memMobil3" name="memMobil3">
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" align="center">
+										　
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="text-align:center">
+										<button class="btn btn-default" type="button" onclick="javascrip:insertMembership()">회원가입</button>
+										<button class="btn btn-default" type="button">취소</button>
+									</td>
+								</tr>
+							</table>
+						</article>
+					</div>
+				</div>
+			</div>
+		</form>
+	</body>
+</html>

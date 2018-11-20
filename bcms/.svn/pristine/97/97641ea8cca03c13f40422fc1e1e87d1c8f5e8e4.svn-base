@@ -1,0 +1,66 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script type="text/javascript">
+	function updateNmeCard() {
+		//alert("수정");
+		document.frm.action = "/updateNmeCard.do";
+		document.frm.submit();
+	}
+	
+	function nmeCardSelectViewForm() {
+		//alert("상세보기");
+		document.frm.action = "/nmeCardSelectViewForm.do";
+		document.frm.submit();
+	}
+</script>
+</head>
+	<body>
+		<div>
+			<c:import url="/title.do"/>
+		</div>
+		<div style="width:70%; margin-left:15%; margin-right:15%;">
+			<form name="frm" method="post">
+				<input type="hidden" name="nmeCardSeq" value="${selectNmeCardView.nmeCardSeq}">
+				<input type="hidden" name="currentPageNo" value="${selectNmeCardView.currentPageNo}">
+				<input type="hidden" name="searchCnd" value="${selectNmeCardView.searchCnd}">
+				<input type="hidden" name="searchWrd" value="${selectNmeCardView.searchWrd}">
+				<div class="col-lg-12">
+					<h3 class="page-header">수정화면</h3>
+				</div>
+				<div class="col-lg-12">
+					<table class="table" style="width:100%;">
+						<colgroup>
+							<col width="10%">
+							<col width="90%">
+						</colgroup>
+						<tr style = "height:35px;">
+							<th class="text-center">성명</th>
+							<td style="text-align:left;"><input class="form-control" type="text" name="nmeCardNme" maxlength="20" value="${selectNmeCardView.nmeCardNme}"></td>
+						</tr>
+						<tr style = "height:35px;">
+							<th class="text-center">기본주소</th>
+							<td style="text-align:left;"><textarea class="form-control" name="nmeCardBascAdrs" maxlength="200">${selectNmeCardView.nmeCardBascAdrs}</textarea></td>
+						</tr>
+						<tr style = "height:35px;">
+							<th class="text-center">상세주소</th>
+							<td style="text-align:left;"><textarea class="form-control" name="nmeCardDetlAdrs" maxlength="200">${selectNmeCardView.nmeCardDetlAdrs}</textarea></td>
+						</tr>
+					</table>
+				</div>
+			</form>
+			<div class="form-group col-sm-12" style="text-align:right;">
+				<input class="btn btn-primary" type="button" value="수정완료" onclick="javascript:updateNmeCard()">
+				<input class="btn btn-default" type="button" value="취소" onclick="javascript:nmeCardSelectViewForm()">
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >	<!-- 여기서 부터 끝까지 붙여 넣음 -->
+
+<mapper namespace="nmeCardMapper">
+	
+	<resultMap id="nmeCardValues" type="nmeCardVo">	<!-- ValueObject의 속성과 DataBase의 column을 연계 시켜준다. -->
+		<result property="nmeCardSeq" column="nmecard_seq"/>
+		<result property="nmeCardLastNme" column="nmecard_lastnme"/>
+		<result property="nmeCardFirstNme" column="nmecard_firstnme"/>
+		<result property="nmeCardNme" column="nmecard_nme"/>
+		<result property="nmeCardSex" column="nmecard_sex"/>
+		<result property="nmeCardPostNum" column="nmecard_post_num"/>
+		<result property="nmeCardBascAdrs" column="nmecard_basc_adrs"/>
+		<result property="nmeCardDetlAdrs" column="nmecard_detl_adrs"/>
+		<result property="nmeCardAdrs" column="nmecard_adrs"/>
+		<result property="nmeCardMobil" column="nmecard_mobil"/>
+		<result property="nmeCardTel" column="nmecard_tel"/>
+		<result property="nmeCardFax" column="nmecard_fax"/>
+		<result property="nmeCardEmail" column="nmecard_email"/>
+		<result property="nmeCardHompg" column="nmecard_hompg"/>
+		<result property="nmeCardHob" column="nmecard_hob"/>
+		<result property="nmeCardInterst" column="nmecard_interst"/>
+		<result property="jobSeq" column="job_seq"/>
+		<result property="postnSeq" column="postn_seq"/>
+		<result property="compnSeq" column="compn_seq"/>
+		<result property="depmtSeq" column="depmt_seq"/>
+		<result property="nmeCardSns" column="nmecard_sns"/>
+		<result property="nmeCardMesngr" column="nmecard_mesngr"/>
+		<result property="nmeCardUseAt" column="nmecard_use_at"/>
+		<result property="nmeCardCretDate" column="nmecard_cret_date"/>
+		<result property="licnsSeq" column="licns_seq"/>
+		<result property="licnsNme" column="licns_nme"/>
+		<result property="licnsType" column="licns_type"/>
+		<result property="licnsCretDate" column="licns_cret_date"/>
+	</resultMap>
+	
+	<resultMap id="sapValues" type="sapVo">
+		<result property="searchBgnDe" column="searchBgnDe"/>
+		<result property="searchEndDe" column="searchEndDe"/>
+		<result property="searchCnd" column="searchCnd"/>
+		<result property="searchWrd" column="searchWrd"/>
+		<result property="searchAry" column="searchAry"/>
+		<result property="currentPageNo" column="currentPageNo"/>
+		<result property="recordCountPerPage" column="recordCountPerPage"/>
+		<result property="pageSize" column="pageSize"/>
+		<result property="totalRecordCount" column="totalRecordCount"/>
+		<result property="totalPageCount" column="totalPageCount"/>
+		<result property="firstRecordIndex" column="firstRecordIndex"/>
+		<result property="lastRecordIndex" column="lastRecordIndex"/>
+		<result property="firstPageNoOnPageList" column="firstPageNoOnPageList"/>
+		<result property="lastPageNoOnPageList" column="lastPageNoOnPageList"/>
+	</resultMap>
+	
+	<select id="selectLicnsList" parameterType="nmeCardVo" resultMap="nmeCardValues">
+		SELECT
+			licns_seq
+			, licns_nme
+			, licns_type
+			, licns_cret_date
+		FROM
+			licns_tb
+		ORDER BY
+			licns_nme;
+	</select>
+	
+	<insert id="insertNmeCard" parameterType="nmeCardVo">
+		<selectKey keyProperty="nmeCardSeq" resultType="int" order="BEFORE">
+			SELECT
+				IFNULL(MAX(nmecard_seq),0) + 1 AS nmecard_seq
+			FROM nmecard_tb;
+		</selectKey>
+		INSERT
+		INTO
+		nmecard_tb(
+			  nmecard_seq
+			, nmecard_lastnme
+			, nmecard_firstnme
+			, nmecard_sex
+			, nmecard_post_num
+			, nmecard_basc_adrs
+			, nmecard_detl_adrs
+			, nmecard_mobil
+			, nmecard_tel
+			, nmecard_fax
+			, nmecard_email
+			, nmecard_hompg
+			, nmecard_hob
+			, nmecard_interst
+			, job_seq
+			, postn_seq
+			, compn_seq
+			, depmt_seq
+			, nmecard_sns
+			, nmecard_mesngr
+			, nmecard_use_at
+			, nmecard_cret_date
+			)
+		VALUES(
+			  #{nmeCardSeq}
+			, #{nmeCardLastNme}
+			, #{nmeCardFirstNme}
+			, #{nmeCardSex}
+			, #{nmeCardPostNum}
+			, #{nmeCardBascAdrs}
+			, #{nmeCardDetlAdrs}
+			, concat(#{nmeCardMobil},#{nmeCardMobil2},#{nmeCardMobil3})
+			, concat(#{nmeCardTel},#{nmeCardTel2},#{nmeCardTel3})
+			, concat(#{nmeCardFax},#{nmeCardFax2},#{nmeCardFax3})
+			, concat(#{nmeCardEmail},'@',#{nmeCardEmail2})
+			, #{nmeCardHompg}
+			, #{nmeCardHob}
+			, #{nmeCardInterst}
+			, #{jobSeq}
+			, #{postnSeq}
+			, #{compnSeq}
+			, #{depmtSeq}
+			, concat(#{nmeCardSns},' (',#{nmeCardSns2},')')
+			, concat(#{nmeCardMesngr},' (',#{nmeCardMesngr2},')')
+			, 'Y'
+			, SYSDATE()
+			);
+	</insert>
+	
+	<select id="selectNmeCardList" parameterType="nmeCardVo" resultMap="nmeCardValues">
+		SELECT
+			  nmecard_seq
+			, nmecard_lastnme
+			, nmecard_firstnme
+			, concat(nmecard_lastnme, nmecard_firstnme) as "nmecard_nme"
+			, nmecard_sex
+			, nmecard_post_num
+			, concat(nmecard_basc_adrs, ' ', nmecard_detl_adrs) as "nmecard_adrs"
+			, nmecard_mobil
+			, nmecard_tel
+			, nmecard_fax
+			, nmecard_email
+			, nmecard_hompg
+			, nmecard_hob
+			, nmecard_interst
+			, job_seq
+			, postn_seq
+			, compn_seq
+			, depmt_seq
+			, nmecard_sns
+			, nmecard_mesngr
+			, nmecard_use_at
+			, nmecard_cret_date
+		FROM
+		nmecard_tb
+		WHERE
+			nmecard_use_at = 'Y'
+		<if test="searchCnd eq 0">
+	  		AND nmecard_firstnme LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		<if test="searchCnd eq 1">
+		   AND nmeCard_mobil LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>	
+		<if test="searchCnd eq 2">
+		   AND nmeCard_email LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		AND nmecard_cret_date > #{searchBgnDe}
+		<if test="searchEndDe != ''">
+			AND #{searchEndDe} > nmecard_cret_date
+		</if>
+		ORDER BY
+		<if test="searchAry eq 0">
+			nmecard_cret_date DESC
+		</if>
+		<if test="searchAry eq 1">
+			nmeCard_nme ASC
+		</if>
+		LIMIT #{recordCountPerPage} OFFSET #{firstRecordIndex};
+	</select>
+	
+	<select id="selectNmeCardCount" parameterType="nmeCardVo" resultType="int">
+		SELECT
+			COUNT(nmecard_seq) AS selectNmeCardCount
+		FROM
+		nmecard_tb
+		WHERE
+			nmecard_use_at = 'Y'
+		<if test="searchCnd eq 0">
+			AND nmecard_firstnme LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		<if test="searchCnd eq 1">
+		   AND nmeCard_mobil LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>	
+		<if test="searchCnd eq 2">
+		   AND nmeCard_email LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		AND nmecard_cret_date > #{searchBgnDe}
+		<if test="searchEndDe != ''">
+			AND #{searchEndDe} > nmecard_cret_date
+		</if>
+		;
+	</select>
+	
+	<select id="selectNmeCardView" parameterType="int" resultMap="nmeCardValues">
+		SELECT
+			  nmecard_seq
+			, nmecard_lastnme
+			, nmecard_firstnme
+			, concat(nmecard_lastnme, nmecard_firstnme) as "nmecard_nme"
+			, nmecard_sex
+			, nmecard_post_num
+			, nmecard_basc_adrs
+			, nmecard_detl_adrs
+			, nmecard_mobil
+			, nmecard_tel
+			, nmecard_fax
+			, nmecard_email
+			, nmecard_hompg
+			, nmecard_hob
+			, nmecard_interst
+			, job_seq
+			, postn_seq
+			, compn_seq
+			, depmt_seq
+			, nmecard_sns
+			, nmecard_mesngr
+			, nmecard_use_at
+			, nmecard_cret_date
+		FROM
+		nmecard_tb
+		WHERE
+			nmecard_seq = #{nmeCardSeq};
+	</select>
+	
+	<update id="updateNmeCard" parameterType="nmeCardVo">
+		UPDATE
+		nmecard_tb
+		SET
+			  nmecard_seq = #{nmeCardSeq}
+			, nmecard_lastnme = #{nmeCardLastNme}
+			, nmecard_firstnme = #{nmeCardFirstNme}
+			, nmecard_sex = #{nmeCardSex}
+			, nmecard_post_num = #{nmeCardPostNum}
+			, nmecard_basc_adrs = #{nmeCardBascAdrs}
+			, nmecard_detl_adrs = #{nmeCardDetlAdrs}
+			, nmecard_mobil = concat(#{nmeCardMobil},#{nmeCardMobil2},#{nmeCardMobil3})
+			, nmecard_tel = concat(#{nmeCardTel},#{nmeCardTel2},#{nmeCardTel3})
+			, nmecard_fax = concat(#{nmeCardFax},#{nmeCardFax2},#{nmeCardFax3})
+			, nmecard_email = concat(#{nmeCardEmail},'@',#{nmeCardEmail2})
+			, nmecard_hompg = #{nmeCardHompg}
+			, nmecard_hob = #{nmeCardHob}
+			, nmecard_interst = #{nmeCardInterst}
+			, job_seq = #{jobSeq}
+			, postn_seq = #{postnSeq}
+			, compn_seq = #{compnSeq}
+			, depmt_seq = #{depmtSeq}
+			, nmecard_sns = concat(#{nmeCardSns},' (',#{nmeCardSns2},')')
+			, nmecard_mesngr = concat(#{nmeCardMesngr},' (',#{nmeCardMesngr2},')')
+			, nmecard_use_at = #{nmeCardUseAt}
+			, nmecard_cret_date = SYSDATE()
+		WHERE
+			nmecard_seq = #{nmeCardSeq};
+	</update>
+	
+	<update id="deleteNmeCard" parameterType="nmeCardVo">
+		UPDATE
+		nmecard_tb
+		SET
+			  nmecard_use_at = 'N'
+			, nmecard_cret_date = SYSDATE()
+		WHERE
+			nmecard_seq in (#{nmeCardSeq});
+	</update>
+	
+	<delete id="realDeleteNmeCard" parameterType="int">
+		DELETE
+		FROM
+		nmecard_tb
+		WHERE
+			nmecard_seq = #{nmeCardSeq};
+	</delete>
+</mapper>

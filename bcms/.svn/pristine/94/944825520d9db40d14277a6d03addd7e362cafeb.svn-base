@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="memMapper">
+	<resultMap id="memValues" type="memVo">
+		<result property="memSeq" column="mem_seq"/>
+		<result property="memId" column="mem_id"/>
+		<result property="memPw" column="mem_pw"/>
+		<result property="memNme" column="mem_nme"/>
+		<result property="memDepmtNme" column="mem_depmt_nme"/>
+		<result property="memPostnNme" column="mem_postn_nme"/>
+		<result property="memSex" column="mem_sex"/>
+		<result property="memBirth" column="mem_birth"/>
+		<result property="memMobil" column="mem_mobil"/>
+		<result property="memJoinDate" column="mem_join_date"/>
+		<result property="memCompnNme" column="mem_compn_Nme"/>
+	</resultMap>
+	
+	<select id="confirm" parameterType="memVo" resultType="int">
+		SELECT
+			COUNT(mem_seq)
+		FROM
+		mem_tb
+		WHERE
+			mem_id = #{memId}
+		AND
+			mem_pw = #{memPw};
+	</select>
+	
+	<select id="selectMemInfo" parameterType="memVo" resultMap="memValues">
+		SELECT
+			  mem_seq
+			, mem_id
+			, mem_nme
+		FROM
+		mem_tb
+		WHERE
+			mem_id = #{memId}
+		AND
+			mem_pw = #{memPw};
+	</select>
+	
+	<update id="updateMemInfo" parameterType="memVo">
+		UPDATE
+		mem_tb 
+		SET
+			  mem_pw = #{memPw}
+			, mem_nme = #{memNme}
+ 		WHERE
+ 			mem_seq = #{memSeq};
+	</update>
+	<!--회사 고유값 생성-->
+	<select id="selectCompnSeq" resultType="int">
+		SELECT IFNULL(MAX(compn_seq),0)+1 FROM compn_tb
+	</select>
+	<!--회사 등록-->
+	<insert id="insertCompn" parameterType="memVo">
+		INSERT 
+		INTO compn_tb(
+			compn_seq
+			,compn_nme
+			,compn_cret_date)
+		VALUE (
+			#{memCompnSeq}
+			,#{memCompnNme}
+			,curdate());
+	</insert>
+	
+	<!--부서 고유값 생성-->
+	<select id="selectMemDepmtSeq" resultType="int">
+		SELECT IFNULL(MAX(depmt_seq),0)+1 FROM depmt_tb
+	</select>
+	<!--부서 등록-->
+	<insert id="insertDepmt" parameterType="memVo">
+		INSERT 
+		INTO depmt_tb(
+			depmt_seq
+			,depmt_nme
+			,depmt_cret_date)
+		VALUE (
+			#{memdepmtSeq}
+			,#{memdepmtnNme}
+			,curdate());
+	</insert>
+	
+	<!--회원 고유값 생성-->
+	<select id="selectMemSeq" resultType="int">
+		SELECT IFNULL(MAX(mem_seq),0)+1 FROM mem_tb
+	</select>
+	
+	<!--회원 가입-->
+	<insert id="insertMembership" parameterType="memVo">
+		INSERT 
+		INTO mem_tb(
+			mem_seq
+			,mem_id
+			,mem_pw
+			,mem_nme
+			,mem_compn_nme
+			,mem_depmt_nme
+			,mem_postn_nme
+			,mem_birth
+			,mem_email
+			,mem_mobil
+			,mem_join_date)
+		VALUE (
+			#{memSeq}
+			,#{memId}
+			,#{memPw}
+			,#{memNme}
+			,#{memCompnNme}
+			,#{memDepmtNme}
+			,#{memPostnNme}
+			,#{memBirth}
+			,concat(#{memEmail1},'@',#{memEmail2})
+			,concat(#{memMobil1},#{memMobil2},#{memMobil3})
+			,curdate());
+	</insert>
+	
+	<select id="memCompnList" resultMap="memValues"> 
+	  	SELECT
+	    	compn_seq
+	    	,compn_nme
+		FROM compn_tb;
+	</select>
+	
+	
+</mapper>

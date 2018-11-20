@@ -1,0 +1,20 @@
+package net.su.bbs.service;
+
+import java.util.List;
+
+import net.su.bbs.valueObject.BbsValueObject;
+import net.su.bbs.valueObject.SearchAndPageValueObject;
+
+public interface BbsService {
+
+	public void insertBbs(BbsValueObject bbsValueObject) throws Exception;
+	
+	public List<BbsValueObject> selectBbsList(SearchAndPageValueObject searchAndPageValueObject) throws Exception;
+	
+	public BbsValueObject selectBbsView(BbsValueObject bbsValueObject) throws Exception;
+	
+	public void updateBbs(BbsValueObject bbsValueObject) throws Exception;
+	
+	public void deleteBbs(int bbsSeq) throws Exception;
+	
+}

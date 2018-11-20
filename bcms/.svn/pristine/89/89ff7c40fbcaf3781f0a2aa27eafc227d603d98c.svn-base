@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<%//아이디를 가져옴 
+	String id = request.getParameter("id");
+	
+	//아이디가 중복 상태인지 검사
+	//ID가 존재하면 true, 존재하지 않으면 false
+	%>
+<html>
+	<head>
+	<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		
+	</body>
+</html>

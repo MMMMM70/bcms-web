@@ -1,0 +1,54 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="/resources/dist/css/ui.css" rel="stylesheet" type="text/css">
+	<script>
+		function logout() {
+			alert("글쓰기");
+			location.href="/logout.do";
+		}
+		function bbsList() {
+			alert("글쓰기");
+			location.href="/bbsListForm.do";
+		}
+	</script>
+</head>
+
+
+	<body>
+		<div align="center" style="margin-top:15px;">
+		   <a href="javascript:bbsList()"><img src="resources/img/BCMS.png"  id="logo"></a>
+		</div>
+		<div class="navbar-wrapper">
+		   <nav class="navbar navbar-inverse navbar-static-top">
+		      <div class="container">
+		         <div class="navbar-header">
+		            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+		               <span class="sr-only">Toggle navigation</span>
+		               <span class="icon-bar"></span>
+		               <span class="icon-bar"></span>
+		               <span class="icon-bar"></span>
+		            </button>
+		            <a class="navbar-brand" href="#"><font style="font-size:13pt; font-weight:bold; font-family:Times New Roman;">BCMS</font></a>
+		         </div>
+		         <div id="navbar" class="navbar-collapse collapse">
+		            <ul class="nav navbar-nav"> <!--왼쪽 바 -->
+		               <li><a href="javascript:cusList();"><font style="font-size:13pt; font-weight:bold;">【명함관리】</font></a></li>
+		               <li><a href="javascript:bmListForm();"><font style="font-size:13pt; font-weight:bold;">【그룹관리】</font></a></li>
+		               <li><a href="javascript:TotalDateMng();"><font style="font-size:13pt; font-weight:bold;">【휴지통】</font></a></li>
+		            </ul>
+		            <ul class="nav navbar-nav navbar-right"> <!--오른쪽 바 -->
+		               <li><a><font style="font-size:13pt; font-weight:bold;">수은불망님 환영합니다.</font></a></li>
+		                 <li><a href="javascript:personalInfo();"><font style="font-size:13pt; font-weight:bold;">【정보관리】</font></a></li>
+		                 <li><a href="javascript:logout();"><font style="font-size:13pt; font-weight:bold;">【로그아웃】</font></a></li>
+		              </ul>
+		         </div>
+		      </div>
+		   </nav>
+		</div>		
+	 </body>
+</html>

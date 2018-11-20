@@ -1,0 +1,32 @@
+package net.su.bcms.dataAccessObject;
+
+import net.su.bcms.valueObject.GroupValueObject;
+import java.util.List; 
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
+public class GroupDataAccessObject  extends SqlSessionDaoSupport{
+	
+	public void groupInsert(GroupValueObject groupValueObject) throws Exception{	
+
+		getSqlSession().insert("groupMapper.groupInsert", groupValueObject);
+
+	}
+	public List<GroupValueObject> gropSelect(GroupValueObject groupValueObject) throws Exception
+	{
+	
+		List<GroupValueObject> groupList = getSqlSession().selectList("groupMapper.groplist", groupValueObject);
+
+		return groupList;
+	}
+	public List<GroupValueObject> groupWholeList(GroupValueObject groupValueObject) throws Exception
+	{
+	
+		List<GroupValueObject> groupWholeList = getSqlSession().selectList("groupMapper.groupWholeList", groupValueObject);
+
+		return groupWholeList;
+	}
+
+}

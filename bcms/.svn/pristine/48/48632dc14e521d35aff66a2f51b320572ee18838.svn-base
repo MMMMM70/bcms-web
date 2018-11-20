@@ -1,0 +1,52 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<link rel="stylesheet" href="/resources/dist/css/ui.css" type="text/css">
+    	<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+    	
+    	<script>
+    	
+    	</script>
+	</head>
+	<body>
+		<div class="wrapper" style="width:500px; float:left;">	
+			<div style="text-align:right">
+				<input class="btn btn-default" type="button" value="전체목록" onclick="">
+			</div>
+			<table class="table table-bordered" style="width:500px">
+				<tr>
+						<th style="text-align:center">제목</th>
+						<td><input class="form-control" type="text" name="title" readOnly></td>
+				</tr>
+				<tr>
+						<th style="text-align:center">구분</th>
+					<td>
+						<select class="form-control" style="display:inline-block;">
+				            <option>선택</option>
+				            <option value="0">meeting</option>
+				            <option value="1">memo</option>
+		            	</select>
+					</td>
+				</tr>
+				<tr>
+					<th rowspan=2 style="text-align:center">참석자</th>				
+					<td><input class="form-control" type="text" name="party" readOnly></td>
+				</tr>
+				<tr>
+					<td><input class="form-control" type="text" name="partyy" readOnly></td>
+				</tr>
+				<tr>
+					<th colspan=2 style="text-align:left">내용</th>
+				</tr>
+				<tr>
+					<td colspan=2><textarea rows="15" cols="80" name="content" readOnly></textarea></td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

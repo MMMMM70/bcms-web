@@ -1,0 +1,68 @@
+package net.su.bcms.dataAccessObject;
+
+import net.su.bcms.valueObject.GroupValueObject;
+import net.su.bcms.valueObject.NmeCardValueObject;
+import net.su.logger.Logger;
+
+import java.util.List; 
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
+public class GroupDataAccessObject  extends SqlSessionDaoSupport{
+	
+	public void groupInsert(GroupValueObject groupValueObject) throws Exception{	
+
+		getSqlSession().insert("groupMapper.groupInsert", groupValueObject);
+
+	}
+	public List<GroupValueObject> gropSelect(GroupValueObject groupValueObject) throws Exception
+	{
+	
+		List<GroupValueObject> groupList = getSqlSession().selectList("groupMapper.groplist", groupValueObject);
+		return groupList;
+	}
+	public List<GroupValueObject> groupWholeList(GroupValueObject groupValueObject) throws Exception
+	{
+	
+		List<GroupValueObject> groupWholeList = getSqlSession().selectList("groupMapper.groupWholeList", groupValueObject);
+		return groupWholeList;
+	}
+	public List<GroupValueObject> groupAllList(GroupValueObject groupValueObject) throws Exception
+	{
+	
+		List<GroupValueObject> groupAllList = getSqlSession().selectList("groupMapper.groupAllList", groupValueObject);
+		return groupAllList;
+	}
+	public int selectGroupCount(GroupValueObject groupValueObject) throws Exception {
+		Logger.info(null);
+		int selectGroupCount = getSqlSession().selectOne("groupMapper.selectGroupCount", groupValueObject);
+		return selectGroupCount;
+	}
+	
+	public void groupMemInsert(GroupValueObject groupValueObject) throws Exception {
+		
+		getSqlSession().delete("groupMapper.groupCleaner", groupValueObject);
+		getSqlSession().insert("groupMapper.groupMemInsert", groupValueObject);
+		}
+	
+	public void groupMemDelete(GroupValueObject groupValueObject) throws Exception {
+
+		getSqlSession().delete("groupMapper.groupMemDelete", groupValueObject);
+	}
+	
+	public void groupDelete(GroupValueObject groupValueObject) throws Exception{	
+
+		getSqlSession().delete("groupMapper.groupDelete", groupValueObject);
+	}
+	public void groupMemAllDelete(GroupValueObject groupValueObject) throws Exception{	
+
+		getSqlSession().delete("groupMapper.groupMemAllDelete", groupValueObject);
+	}
+	public void groupUpdateCommit(GroupValueObject groupValueObject) throws Exception{	
+
+		getSqlSession().delete("groupMapper.groupUpdateCommit", groupValueObject);
+	}
+}

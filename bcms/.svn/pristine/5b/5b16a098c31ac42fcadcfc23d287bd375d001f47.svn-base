@@ -1,0 +1,51 @@
+package net.su.bbs.service;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.su.bbs.dataAccessObject.BbsDataAccessObject;
+import net.su.bbs.valueObject.BbsValueObject;
+import net.su.bbs.valueObject.SearchAndPageValueObject;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class BbsServiceimpl implements BbsService {
+
+	@Resource
+	private BbsDataAccessObject bbsDataAccessObject;
+	
+	public void insertBbs(BbsValueObject bbsValueObject) throws Exception {
+		System.out.println("BbsServiceimpl의 insertBbs()작동");
+		bbsDataAccessObject.insertBbs(bbsValueObject);
+	}
+	
+	public List<BbsValueObject> selectBbsList(SearchAndPageValueObject searchAndPageValueObject) throws Exception {
+		System.out.println("BbsServiceimpl의 selectBbsList()작동");
+		int selectBbsCount = bbsDataAccessObject.selectBbsCount(searchAndPageValueObject);
+		List<BbsValueObject> selectBbsList = bbsDataAccessObject.selectBbsList(searchAndPageValueObject);
+		searchAndPageValueObject.setTotalRecordCount(selectBbsCount);
+		return selectBbsList;
+	}
+	
+	public BbsValueObject selectBbsView(BbsValueObject bbsValueObject) throws Exception {
+		System.out.println("BbsServiceimpl의 selectBbsView()작동");
+		BbsValueObject selectBbsView = bbsDataAccessObject.selectBbsView(bbsValueObject.getBbsSeq());
+		selectBbsView.setCurrentPageNo(bbsValueObject.getCurrentPageNo());
+		selectBbsView.setSearchCnd(bbsValueObject.getSearchCnd());
+		selectBbsView.setSearchWrd(bbsValueObject.getSearchWrd());
+		return selectBbsView;
+	}
+	
+	public void updateBbs(BbsValueObject bbsValueObject) throws Exception {
+		System.out.println("BbsServiceimpl의 updateBbs()작동");
+		bbsDataAccessObject.updateBbs(bbsValueObject);
+	}
+	
+	public void deleteBbs(int bbsSeq) throws Exception {
+		System.out.println("BbsServiceimpl의 deleteBbs()작동");
+		bbsDataAccessObject.deleteBbs(bbsSeq);//bbs_use_at을 N으로 변경
+		//bbsDataAccessObject.realDeleteBbs(bbsSeq);//게시글 완전 삭제
+	}
+}

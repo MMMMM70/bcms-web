@@ -1,0 +1,51 @@
+package net.su.shar.dataAccessObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.su.shar.valueObject.SharValueObject;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class SharDataAccessObject extends SqlSessionDaoSupport {
+
+	public List<SharValueObject> selectDumpList(SharValueObject SharVo){
+		List<SharValueObject> dumpMemList = getSqlSession().selectList("sharMapper.dumpMemList", SharVo);
+		return dumpMemList;
+	}
+	public List<SharValueObject> selectNonSharList(SharValueObject SharVo){
+		List<SharValueObject> nonSharMemList = getSqlSession().selectList("sharMapper.nonSharMemList", SharVo);
+		return nonSharMemList;
+	}
+	public List<SharValueObject> selectMemList(SharValueObject SharVo){
+		List<SharValueObject> selectMemList = getSqlSession().selectList("sharMapper.selectMemList", SharVo);
+		return selectMemList; 
+	}
+	public List<SharValueObject> selectSharList(SharValueObject SharVo){
+		List<SharValueObject> sharMemList = getSqlSession().selectList("sharMapper.sharMemList", SharVo);
+		return sharMemList;
+	}
+	public void plusingProcessor(SharValueObject VO){
+		getSqlSession().insert("sharMapper.insertDump", VO); // 임시 저장소에 추가	
+	}
+	public void minusingProcessor(SharValueObject VO){
+		getSqlSession().delete("sharMapper.deleteDump", VO); // dump에서 삭제
+		
+	}
+	public void dumpToShar(SharValueObject SharVo){
+		getSqlSession().insert("sharMapper.dumpToShar", SharVo);// dump에서 insert로.
+		getSqlSession().insert("sharMapper.newSpeedSharInsert", SharVo);// dump에서 insert로.
+		getSqlSession().delete("sharMapper.dumpCleaning", SharVo);// dump 청소.
+	}
+	public void dumpCancel(SharValueObject SharVo){
+		getSqlSession().delete("sharMapper.dumpCleaning", SharVo);// dump 청소.
+	}
+	public void remvSharRecv(SharValueObject VO){
+		System.out.println("@@@");
+		getSqlSession().update("sharMapper.remvSharRecv", VO);
+		getSqlSession().update("sharMapper.newSpeedSharRels", VO); // dump에서 삭제
+		
+	}
+}

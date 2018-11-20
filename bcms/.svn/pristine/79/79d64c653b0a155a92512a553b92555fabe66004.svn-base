@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="sharMapper">
+	<resultMap id="sharValues" type="SharVo">
+		<result property="sharSeq" column="shar_seq"/>   <!-- 공유SEQ -->
+		<result property="nmeCardSeq" column="nmecard_seq"/> <!-- 명함SEQ -->
+		<result property="sharType" column="shar_type"/> <!-- 공유 타입 -->
+		<result property="sharCretDate" column="shar_cret_date"/>		 <!-- 공유날짜 -->
+		<result property="memSeq" column="mem_seq"/>
+		<result property="memNme" column="mem_nme"/>
+		<result property="memDepmtNme" column="mem_depmt_nme"/>
+		<result property="memPostnNme" column="mem_postn_nme"/>
+		<result property="memEmail" column="mem_email"/>
+	</resultMap>
+	
+<!-- 	<resultMap id="memValues" type="memVo"> -->
+<!-- 		<result property="memSeq" column="mem_seq"/> -->
+<!-- 		<result property="memNme" column="mem_nme"/> -->
+<!-- 		<result property="memDepmtNme" column="mem_depmt_nme"/> -->
+<!-- 		<result property="memPostnNme" column="mem_postn_nme"/> -->
+<!-- 		<result property="memEmail" column="mem_email"/> -->
+<!-- 	</resultMap> -->
+<!-- 	공유 중인 명함 리스트. /// 파라미터 재 확인. -->
+
+<!-- 	SELECT mem.mem_Seq, -->
+<!-- 			  mem.mem_nme,  -->
+<!-- 			  mem.mem_depmt_nme, -->
+<!-- 			  mem.mem_postn_nme,  -->
+<!-- 			  mem.mem_email  -->
+<!-- 	FROM mem_tb mem, shar_tb shar -->
+<!-- 	WHERE  shar.shar_type='y'  -->
+<!-- 	and mem.mem_seq = shar.mem_seq  -->
+<!-- 	and shar.nmecard_seq = #{nmeCardSeq} -->
+<!-- 	UNION -->
+
+	<select id="dumpMemList"  resultMap="sharValues" parameterType="SharVo">
+	SELECT mem.mem_Seq,
+			  mem.mem_nme, 
+			  mem.mem_depmt_nme,
+			  mem.mem_postn_nme, 
+			  mem.mem_email 
+	FROM mem_tb mem, dump_tb dump
+	WHERE dump.shar_type='y' 
+	and mem.mem_seq = dump.mem_seq 
+	and dump.nmecard_seq = #{nmeCardSeq};
+	</select>
+	<select id="selectMemList"  resultMap="sharValues" parameterType="SharVo">
+		SELECT
+			mem.mem_Seq,mem.mem_nme, mem.mem_depmt_nme, mem.mem_postn_nme, mem.mem_email
+		FROM
+		mem_tb mem
+	</select>
+	
+	<select id="nonSharMemList"  resultMap="sharValues" parameterType="SharVo">
+		SELECT  mem.mem_Seq,
+				mem.mem_nme,
+				mem.mem_depmt_nme,
+                mem.mem_postn_nme,
+                mem.mem_email
+		FROM
+		mem_tb mem
+        WHERE
+        mem.mem_seq not in(SELECT shar.mem_seq
+        							FROM shar_tb as shar
+        							WHERE shar.nmecard_seq = #{nmeCardSeq} 
+        							AND shar.shar_type ='y')
+        and mem.mem_seq not in (SELECT dump.mem_seq
+        								   FROM dump_tb as dump
+        								   WHERE dump.nmecard_seq = 1 
+        								   AND dump.shar_type ='y');
+	</select>
+	
+	<insert id="insertDump"  parameterType="SharVo">
+		INSERT into dump_tb(dump_seq,
+								  shar_type,
+								  mem_seq,
+								  nmeCard_seq)
+		VALUE((SELECT IFNULL(MAX(dump_seq),0)+1 FROM dump_tb as dump_seq),
+				'y',
+				#{memSeq},
+				#{nmeCardSeq});
+	
+	</insert>
+<!-- 	<insert id="minusDump"  parameterType="SharVo"> -->
+<!-- 		insert into dump_tb(dump_seq, -->
+<!-- 								  shar_type, -->
+<!-- 								  mem_seq, -->
+<!-- 								  nmeCard_seq) -->
+<!-- 		Value((SELECT IFNULL(MAX(dump_seq),0)+1 FROM dump_tb as dump_seq), -->
+<!-- 				'n', -->
+<!-- 				#{memSeq}, -->
+<!-- 				#{nmeCardSeq}); -->
+	
+<!-- 	</insert> -->
+	<delete id="deleteDump"  parameterType="SharVo">
+		DELETE FROM dump_tb 
+		WHERE nmeCard_seq = #{nmeCardSeq}
+		AND mem_Seq = #{memSeq};
+	</delete>
+	<insert id ="dumpToShar" parameterType="SharVo">
+	INSERT INTO SHAR_TB(shar_SEQ, 
+							   nmecard_seq, 
+							   MEM_SEQ, 
+							   SHAR_TYPE,
+							   shar_cret_date)        
+        SELECT (SELECT IFNULL(MAX(shar_seq),0) from shar_tb)+@seq := @seq+1 as seq,
+        		 nmecard_seq, 
+        		 mem_seq, 
+        		 shar_type, 
+        		 now()
+        FROM dump_tb, 
+         		(SELECT @seq :=0)a
+        WHERE nmecard_seq = 1;
+	</insert>
+	<insert id ="newSpeedSharInsert" parameterType="SharVo">
+INSERT INTO newspeed_tb(newspeed_Seq, 
+							         send_Nme, 
+							         nmecard_firstnme, 
+							         nmecard_lastnme,
+							         newspeed_type,
+							         newspeed_date,
+							         receive_Seq) 
+        SELECT (SELECT IFNULL( max(newspeed_seq), 0) from newspeed_tb)+@seq := @seq+1 as seq,
+				'안동 할렘가',
+                nmecard.nmecard_firstnme,
+                nmecard.nmecard_lastnme,
+                'y',
+                now(),
+                dump.mem_seq
+        FROM dump_tb dump, 
+			 nmecard_tb nmecard ,
+         		(SELECT @seq :=0)a
+        WHERE dump.nmecard_seq = #{nmeCardSeq}
+        and dump.nmecard_seq = nmecard.nmecard_seq;
+	</insert>
+	<delete id="dumpCleaning"  parameterType="SharVo">
+		DELETE FROM dump_tb 
+		WHERE nmeCard_seq = #{nmeCardSeq};
+	</delete>
+	
+</mapper>

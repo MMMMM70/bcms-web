@@ -1,0 +1,22 @@
+package net.su.login.dataAccessObject;
+
+import net.su.login.valueObject.MemValueObject;
+
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class MemDataAccessObject extends SqlSessionDaoSupport {
+
+	public int confirm(MemValueObject memValueObject) throws Exception {
+		System.out.println("MemDataAccessObject의 confirm() 작동");
+		int confirm = getSqlSession().selectOne("memMapper.confirm", memValueObject);
+		return confirm;
+	}
+	
+	public MemValueObject selectMemInfo(MemValueObject memValueObject) throws Exception {
+		System.out.println("MemDataAccessObject의 selectMemInfo() 작동");
+		memValueObject = getSqlSession().selectOne("memMapper.selectMemInfo", memValueObject);
+		return memValueObject;
+	}
+}

@@ -1,0 +1,42 @@
+package net.su.login.valueObject;
+
+public class MemValueObject {
+	
+	private int memSeq;//회원고유값
+	private String memId;//회원ID
+	private String memPw;//회원PW
+	private String memName;//회원 이름
+	private String memContact;//회원 연락처
+	
+	public int getMemSeq() {
+		return memSeq;
+	}
+	public void setMemSeq(int memSeq) {
+		this.memSeq = memSeq;
+	}
+	public String getMemId() {
+		return memId;
+	}
+	public void setMemId(String memId) {
+		this.memId = memId;
+	}
+	public String getMemPw() {
+		return memPw;
+	}
+	public void setMemPw(String memPw) {
+		this.memPw = memPw;
+	}
+	public String getMemName() {
+		return memName;
+	}
+	public void setMemName(String memName) {
+		this.memName = memName;
+	}
+	public String getMemContact() {
+		return memContact;
+	}
+	public void setMemContact(String memContact) {
+		this.memContact = memContact;
+	}
+	
+}

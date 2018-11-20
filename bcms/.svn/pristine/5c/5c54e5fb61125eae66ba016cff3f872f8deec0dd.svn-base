@@ -1,0 +1,107 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="/resources/dist/css/ui.css" type="text/css">
+	<link href="/resources/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="./resources/dist/js/jquery-2.1.3.min.js"/></script>
+	<script src="./resources/dist/js/jquery-ui.js"></script>
+	<script src="./resources/dist/js/sharFunction.js"></script>
+</head>
+<body>
+<script> <!-- 더하기 -->
+
+function plus(){
+    var plusRecv ="";
+    var plusArray = new Array();  
+
+    <c:forEach var="all" items="${allMemList}" varStatus="status">
+    plusRecv= "#"+"${all.memSeq}";;
+    if($(plusRecv).is(":checked")){
+    	plusArray.push("${all.memSeq}")
+    }
+    </c:forEach>
+
+   $.ajax({
+      type : 'POST',
+      url : 'sharPlus.do',
+      data : {
+          "plus" : "0",
+    	  "plus" : plusArray
+      },
+      success:
+         function returning(){
+            $.ajax({
+            type: "POST",
+            url: 'sharForm.do',
+            success: function(msg) {
+               
+               document.getElementById("sharTable").innerHTML = msg;
+            }
+         });}
+   });
+   var plusRecv ="";
+   var plusArray = "";  
+} 
+function minus(){
+    var minusRecv ="";
+    var minusArray = new Array();  
+
+    <c:forEach var="all" items="${allMemList}" varStatus="status">
+    minusRecv= "#"+"${all.memSeq}";;
+    if($(minusRecv).is(":checked")){
+    	minusArray.push("${all.memSeq}")
+    }
+    </c:forEach>
+
+   $.ajax({
+      type : 'POST',
+      url : 'sharMinus.do',
+      data : {
+          "minus" : "0",
+    	  "minus" : minusArray
+      },
+      success:
+         function returning(){
+            $.ajax({
+            type: "POST",
+            url: 'sharForm.do',
+            success: function(msg) {
+               
+               document.getElementById("sharTable").innerHTML = msg;
+            }
+         });}
+   });
+   var minusRecv ="";
+   var minusArray = "";  
+} 
+
+function sharInsert(){
+	location.href ='/sharInsert.do',
+	  self.close();
+}
+function sharCancel(){
+	location.href="/sharCancel.do";
+	  self.close();
+}
+</script>
+	<div style="float:center;margin-left:50px;margin-top:20px; width:1500px;margin-bottom:30px;border: 5px solid  black;">		
+		<div style=" height: 800px; margin-left: 20px;margin-bottom:30px;margin-top:30px;border: 3px solid  black;">
+			<div style="float:left;height: 800px;width:200px;border: 5px solid  black;">
+					<a href="javascript:nmeCardLogo()"><img src="resources/img/BCMS.png"  style="max-width: 55%;height: auto;"></a>
+			</div>			
+			<div style="float:left;height: 800px;width:1000px;">
+				<c:import url="/sharTableForm.do"/>
+			</div>
+			<div style="float:left;height: 800px;width:248px;border: 3px solid black;;">
+				<c:import url="/newSpeed.do"/>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

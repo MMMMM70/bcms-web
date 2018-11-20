@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >	<!-- 여기서 부터 끝까지 붙여 넣음 -->
+
+<mapper namespace="sharNmeCardMapper"> 
+	
+	<resultMap id="nmeCardValues" type="nmeCardVo">	<!-- ValueObject의 속성과 DataBase의 column을 연계 시켜준다. -->
+		<result property="cretrSeq" column="cretr_seq"/>
+		<result property="nmeCardSeq" column="nmecard_seq"/>
+		<result property="nmeCardLastNme" column="nmecard_lastnme"/>
+		<result property="nmeCardFirstNme" column="nmecard_firstnme"/>
+		<result property="nmeCardNme" column="nmecard_nme"/>
+		<result property="nmeCardSex" column="nmecard_sex"/>
+		<result property="nmeCardPostNum" column="nmecard_post_num"/>
+		<result property="nmeCardBascAdrs" column="nmecard_basc_adrs"/>
+		<result property="nmeCardDetlAdrs" column="nmecard_detl_adrs"/>
+		<result property="nmeCardAdrs" column="nmecard_adrs"/>
+		<result property="nmeCardMobil" column="nmecard_mobil"/>
+		<result property="nmeCardTel" column="nmecard_tel"/>
+		<result property="nmeCardFax" column="nmecard_fax"/>
+		<result property="nmeCardEmail" column="nmecard_email"/>
+		<result property="nmeCardHompg" column="nmecard_hompg"/>
+		<result property="nmeCardHob" column="nmecard_hob"/>
+		<result property="nmeCardInterst" column="nmecard_interst"/>
+		<result property="jobNme" column="job_nme"/>
+		<result property="postnNme" column="postn_nme"/>
+		<result property="compnNme" column="compn_nme"/>
+		<result property="depmtNme" column="depmt_nme"/>
+		<result property="nmeCardSns" column="nmecard_sns"/>
+		<result property="nmeCardMesngr" column="nmecard_mesngr"/>
+		<result property="nmeCardUseAt" column="nmecard_use_at"/>
+		<result property="nmeCardCretDate" column="nmecard_cret_date"/>
+		<result property="licnsSeq" column="licns_seq"/>
+		<result property="licnsNme" column="licns_nme"/>
+		<result property="licnsType" column="licns_type"/>
+		<result property="licnsCretDate" column="licns_cret_date"/>
+		<result property="currentPageNo" column="currentPageNo"/>
+	</resultMap>
+	
+	<resultMap id="nmeCardComnctnValues" type="comnctnNmeCardVo">
+		<result property="comnctnSeq" column="comnctn_seq"/>
+		<result property="nmeCardSeq" column="nmecard_seq"/>
+		<result property="memSeq" column="mem_seq"/>
+		<result property="comnctnTitl" column="comnctn_titl"/>
+		<result property="comnctnContn" column="comnctn_contn"/>
+		<result property="comnctnType" column="comnctn_type"/>
+		<result property="comnctnCretDate" column="comnctn_cret_date"/>
+		<result property="comnctnPSeq" column="comnctn_pseq"/>
+		<result property="comnctnuseat" column="comnctn_use_at"/>      
+	</resultMap>
+	
+	<resultMap id="sapValues" type="sapVo">
+		<result property="searchBgnDe" column="searchBgnDe"/>
+		<result property="searchEndDe" column="searchEndDe"/>
+		<result property="searchCnd" column="searchCnd"/>
+		<result property="searchWrd" column="searchWrd"/>
+		<result property="searchAry" column="searchAry"/>
+		<result property="currentPageNo" column="currentPageNo"/>
+		<result property="recordCountPerPage" column="recordCountPerPage"/>
+		<result property="pageSize" column="pageSize"/>
+		<result property="totalRecordCount" column="totalRecordCount"/>
+		<result property="totalPageCount" column="totalPageCount"/>
+		<result property="firstRecordIndex" column="firstRecordIndex"/>
+		<result property="lastRecordIndex" column="lastRecordIndex"/>
+		<result property="firstPageNoOnPageList" column="firstPageNoOnPageList"/>
+		<result property="lastPageNoOnPageList" column="lastPageNoOnPageList"/>
+	</resultMap>
+	
+	
+	
+	<resultMap id="comnctnsapValues" type="comnctnSapVo">
+		<result property="comnctnSearchBgnDe" column="comnctnSearchBgnDe"/>
+		<result property="comnctnSearchEndDe" column="comnctnSearchEndDe"/>
+		<result property="comnctnSearchCnd" column="comnctnSearchCnd"/>
+		<result property="comnctnSearchWrd" column="comnctnSearchWrd"/>
+		<result property="comnctnSearchAry" column="comnctnSearchAry"/>
+		<result property="comnctnCurrentPageNo" column="comnctnCurrentPageNo"/>
+		<result property="comnctnRecordCountPerPage" column="comnctnRecordCountPerPage"/>
+		<result property="comnctnPageSize" column="comnctnPageSize"/>
+		<result property="comnctnTotalRecordCount" column="comnctnTotalRecordCount"/>
+		<result property="comnctnTotalPageCount" column="comnctnTotalPageCount"/>
+		<result property="comnctnFirstRecordIndex" column="comnctnFirstRecordIndex"/>
+		<result property="comnctnLastRecordIndex" column="comnctnLastRecordIndex"/>
+		<result property="comnctnFirstPageNoOnPageList" column="comnctnFirstPageNoOnPageList"/>
+		<result property="comnctnLastPageNoOnPageList" column="comnctnLastPageNoOnPageList"/>
+	</resultMap>
+	
+	<!-- 명함 리스트 조회 -->
+	<select id="selectSharNmeCardList" parameterType="nmeCardVo" resultMap="nmeCardValues">
+		SELECT
+			cretr_seq
+			, b.nmecard_seq
+			, nmecard_lastnme
+			, nmecard_firstnme
+			, concat(nmecard_lastnme, nmecard_firstnme) as 'nmecard_nme'
+			, nmecard_sex
+			, nmecard_post_num
+			, concat(nmecard_basc_adrs, ' ', nmecard_detl_adrs) as 'nmecard_adrs'
+			, IF(nmecard_mobil LIKE '010', ' ', nmecard_mobil) as 'nmecard_mobil'
+			, nmecard_tel
+			, nmecard_fax
+			, IF(nmecard_email LIKE '%@', ' ', nmecard_email) as 'nmecard_email'
+			, nmecard_hompg
+			, nmecard_hob
+			, nmecard_interst
+			, job_nme
+			, postn_nme
+			, compn_nme
+			, depmt_nme
+			, IF(nmecard_sns LIKE '%()%', '', nmecard_sns) as 'nmecard_sns'
+			, IF(nmecard_mesngr LIKE '%()%', '', nmecard_mesngr) as 'nmecard_mesngr'
+<!-- 		, IFNULL(nmecard_licns,'') as 'nmecard_licns' -->
+			, nmecard_use_at
+			, nmecard_cret_date
+		FROM
+		shar_tb a
+		JOIN nmecard_tb b on a.nmecard_seq = b.nmecard_seq
+		WHERE
+			shar_type = 'y'
+		<if test="searchCnd == 0">
+	  		AND CONCAT(nmecard_lastnme,nmecard_firstnme) LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		<if test="searchCnd == 1">
+		   AND nmeCard_mobil LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>	
+		<if test="searchCnd == 2">
+		   AND nmeCard_email LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		AND nmecard_cret_date > #{searchBgnDe}
+		<if test="searchEndDe != ''">
+			AND #{searchEndDe} > nmecard_cret_date
+		</if>
+		AND cretr_seq = ${cretrSeq}
+		ORDER BY
+		<if test="searchAry != 1">
+			nmecard_cret_date DESC
+		</if>
+		<if test="searchAry == 1">
+			nmeCard_nme ASC
+		</if>
+		LIMIT #{recordCountPerPage} OFFSET #{firstRecordIndex};
+	</select>
+	
+	<!-- 명함 레코드 조회 -->
+	<select id="selectSharNmeCardCount" parameterType="nmeCardVo" resultType="int">
+		SELECT
+			COUNT(nmecard_seq) AS selectNmeCardCount
+		FROM
+		nmecard_tb
+		WHERE
+			nmecard_use_at = #{nmeCardUseAt}
+		<if test="searchCnd == 0">
+			AND CONCAT(nmecard_lastnme,nmecard_firstnme) LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		<if test="searchCnd == 1">
+		   AND nmeCard_mobil LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>	
+		<if test="searchCnd == 2">
+		   AND nmeCard_email LIKE CONCAT ('%', #{searchWrd},'%')
+		</if>
+		AND nmecard_cret_date > #{searchBgnDe}
+		<if test="searchEndDe != ''">
+			AND #{searchEndDe} > nmecard_cret_date
+		</if>
+			AND cretr_seq = #{cretrSeq}
+		;
+	</select>
+	<select id="selectSharNmeCardView" parameterType="int" resultMap="nmeCardValues">
+		SELECT
+			cretr_seq
+			, nmecard_seq
+			, nmecard_lastnme
+			, nmecard_firstnme
+			, concat(nmecard_lastnme, nmecard_firstnme) as 'nmecard_nme'
+			, nmecard_sex
+			, nmecard_post_num
+			, nmecard_basc_adrs
+			, nmecard_detl_adrs
+			, IF(nmecard_mobil LIKE '010', ' ', nmecard_mobil) as 'nmecard_mobil'
+			, nmecard_tel
+			, nmecard_fax
+			, IF(nmecard_email LIKE '%@', ' ', nmecard_email) as 'nmecard_email'
+			, nmecard_hompg
+			, nmecard_hob
+			, nmecard_interst
+			, job_nme
+			, postn_nme
+			, compn_nme
+			, depmt_nme
+			, IF(nmecard_sns LIKE '%()%', ' ', nmecard_sns) as 'nmecard_sns'
+			, IF(nmecard_mesngr LIKE '%()%', ' ', nmecard_mesngr) as 'nmecard_mesngr'
+			, nmecard_use_at
+			, nmecard_cret_date
+		FROM
+		nmecard_tb
+		WHERE
+			nmecard_seq = #{nmeCardSeq};
+	</select>
+</mapper>
