@@ -20,7 +20,7 @@
   - [커뮤니케이션/명함변경내역](https://github.com/MMMMM70/bcms-web/tree/master/bcms/src/main/java/net/su/bcms)
   - [뉴스피드]()
 * <b>결과/성과</b><br>
-  - Spring MVC 흐름 
+  - Spring MVC 흐름 이해
   - 서버 클라이언트간의 상호작용
   - JQuery 기술 활용 및 습득
   - SVN 활용을 통한 협업/버전관리 경험
